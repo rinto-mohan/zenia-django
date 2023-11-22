@@ -1,0 +1,110 @@
+{% extends 'user/base.html' %}
+{% load static %}
+{% block title %}
+Zenia
+{% endblock title %}
+{% block 'body' %}
+
+
+<body>
+
+  <div aria-live="polite" aria-atomic="true" class="toast-container position-fixed  end-0 p-3 mt-70" id="toastPlacement" style="z-index: 1000;">
+    {% for message in messages %}
+      <div class="toast align-items-center text-white bg-{{ message.tags }} border-0 pe-3" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            {{ message }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+    
+      <main class="main">
+        <section class="section block-content-lookbook">
+          <div class="list-lookbok-style-2">
+            <div class="item-lookbook"> 
+              {% comment %} <div class="item-lookbook-video">
+                <video width="100%" height="auto" controls>
+                    <source src="{% static 'assets/videos/banner_video.mp4' %}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div> {% endcomment %}
+            <div class="item-lookbook-video">
+              <div id="video-container" class="position-relative">
+
+              <video id="banner-video" width="100%" height="auto" preload="auto" poster="{% static 'assets/imgs/banner/vid_cover1.jpg' %}" autoplay muted loop>
+                  <source src="{% static 'assets/videos/banner_video.mp4' %}" type="video/mp4">
+                  Your browser does not support the video tag.
+              </video>
+
+              {% comment %} <img id="cover-image" class="position-absolute" src="{% static 'assets/imgs/banner/vid_cover1.jpg' %}" alt="Video Cover Image"> {% endcomment %}
+          </div>
+        </div>
+              {% comment %} <div class="item-lookbook-image"><img src="{% static 'assets/imgs/page/lookbook2/banner01.png' %}" alt="zenia"></div> {% endcomment %}
+              <div class="item-lookbook-info mt-5">
+                <h1 class="color-white"></h1>
+                <p class="text-24 color-white"></p>
+                <div class="box-button-lookbook"> <a class="btn btn-border-white" href="/user_shop">Shop Now</a></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section block-shop-1"> 
+          <div class="container"> 
+            <h3 class="neutral-dark mb-50 wow fadeInLeft">Shop by Collection</h3>
+            <div class="box-swiper wow fadeInUp"> 
+              <div class="box-page-swiper">
+                <div class="swiper-button-prev swiper-button-prev-collection btn-prev-style-1"></div>
+                <div class="swiper-button-next swiper-button-next-collection btn-next-style-1"></div>
+              </div>
+              <div class="swiper-container swiper-4-items pb-0">
+                <div class="swiper-wrapper">
+                  {% for product in show_products %}
+                  {% if not product.soft_deleted and not product.category.soft_deleted %}
+                  {% if product.product_images.url %}
+                  <div class="swiper-slide">
+                    <div class="cardCollectionStyle1 wow fadeInUp">
+
+                      <div class="cardImage"><a href="{% url 'user_product_detail' id=product.id %}">
+                        
+                        <img src="{{product.product_images.url}}" alt="zenia"></a>
+                          
+                      </div>
+                      
+                      <div class="cardInfo"><a href="{% url 'user_product_detail' id=product.id %}">
+                        <h6>Buy Now</h6></a></div>
+                      </div>
+                  </div>
+                  {% endif %} 
+                  {% endif %} 
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    
+
+      <script>
+        var video = document.getElementById("banner-video");
+        var coverImage = document.getElementById("cover-image");
+    
+        function togglePlayPause() {
+            if (video.paused) {
+                video.play();
+                coverImage.style.display = "none"; // Hide the cover image when playing
+            } else {
+                video.pause();
+                coverImage.style.display = "block"; // Show the cover image when paused
+            }
+        }
+        video.addEventListener("click", togglePlayPause);
+      </script>
+
+
+   {% endblock %}
+   

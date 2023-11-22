@@ -1,0 +1,224 @@
+{% extends 'user/base.html' %}
+{% block title %}
+Zenia
+{% endblock title %}
+{% load static %}
+{% block 'body' %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<!-- Include the Cropper.js CSS and JavaScript files -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+
+<!-- Include jQuery first -->
+
+
+<div aria-live="polite" aria-atomic="true" class="toast-container position-fixed  end-0 p-3 mt-70" id="toastPlacement" style="z-index: 1000;">
+    {% for message in messages %}
+      <div class="toast align-items-center text-white bg-{{ message.tags }} border-0 pe-3" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            {{ message }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+
+<main class="main">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="index.html" rel="nofollow">Home</a>
+                <span></span> Pages
+                <span></span> Account
+            </div>
+        </div>
+    </div>
+    <section class="pt-50 pb-50">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 m-auto">
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8">
+                            <div class="dashboard-menu">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>Account Details</h5>
+                                        </div>
+                                        <div class="card-body container">
+                                            <form method="POST" action="/user_profile_edit" id="profileEditForm" enctype="multipart/form-data">
+                                                {% csrf_token %}
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="form-group ">
+                                                             <label>First Name </label>
+                                                            {% comment %}<input class="form-control square" value="{{user.first_name}} " name="first_name" type="text"> {% endcomment %}
+                                                            {{pform.first_name}}
+                                                            {% if pform.first_name.errors %}
+                                                            <p class="text-danger">{{ pform.first_name.errors.0 }}</p>
+                                                            {% endif %}
+                                                                
+                                                        </div>
+                                                        <div class="form-group ">
+                                                             <label>Last Name </label>
+                                                            {% comment %}<input class="form-control square" value="{{user.last_name}} " name="last_name"> {% endcomment %}
+                                                            {{pform.last_name}}
+                                                            {% if pform.last_name.errors %}
+                                                            <p class="text-danger">{{ pform.last_name.errors.0 }}</p>
+                                                            {% endif %}
+                                                        </div>
+                                                        <div class="form-group ">
+                                                             <label>Username </label>
+                                                            {% comment %}<input class="form-control square" value="{{user.username}} " name="username" type="text"> {% endcomment %}
+                                                            {{pform.username}}
+                                                            {% if pform.username.errors %}
+                                                            <p class="text-danger">{{ pform.username.errors.0 }}</p>
+                                                            {% endif %}
+                                                        </div>
+                                                        {% comment %} <div class="form-group ">
+                                                             <label>Email Address </label>
+                                                            <input class="form-control square" value="{{user.email}} " name="email" type="email" disabled>
+                                                            
+
+                                                        </div> {% endcomment %}
+                                                        <div class="form-group ">
+                                                            <label>Mobile</label>
+                                                            {% comment %}<input class="form-control square" value="{{user.mobile }} " name="mobile" type="text" > {% endcomment %}
+                                                            {{pform.mobile}}
+                                                            {% for error in pform.mobile.errors %}
+                                                            <p class="text-danger">{{ error }}</p>
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                        <div class="col-md-6">
+                                                            <div class="info-wrap text-center">
+                                                                <img id="imagePreview" class="cropper-bg" src="{{user.profile_img}}" width="100" height="100" style="border-radius: 50%;"><br>
+                                                                <label class="" >Profile Image</label><br>
+                                                                <input class="form-control" width="50" height="100" type="file" id="imageInput" name="profile_img" value="{{user.profile_img}}" accept="image/*" ><br>
+                                                            </div>
+                                                            <input type="hidden" id="croppedImageData" name="profile_img" accept="image/*">
+                                                        </div>
+                                                    <div class="col-md-12 text-center">
+                                                        <button type="submit" class="btn btn-black w-100"  id="saveButton" value="save">Save</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+{% comment %} <script>
+    document.getElementById('user_logout').addEventListener('click',function(){
+    Swal.fire({
+title: 'Are you sure?',
+text: "You won't to Logout!",
+icon: 'warning',
+showCancelButton: true,
+confirmButtonColor: '#3085d6',
+cancelButtonColor: '#d33',
+confirmButtonText: 'Logout'
+}).then((result) => {
+if (result.isConfirmed) {
+
+window.location.href = '/user_logout';
+}
+})
+})
+
+</script> {% endcomment %}
+
+{% comment %} <script>
+    const imageInput = document.getElementById('imageInput');
+    const imagePreview = document.getElementById('imagePreview');
+    const croppedImageData = document.getElementById('croppedImageData');
+    let cropper;
+
+    imageInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                imagePreview.src = event.target.result;
+
+                // Initialize Cropper.js with options (adjust options as needed)
+                cropper = new Cropper(imagePreview, {
+                    aspectRatio: 1, // Set your desired aspect ratio
+                    viewMode: 2,    // Set your desired view mode
+                    ready() {
+                        // Store the initial crop data (needed for resetting)
+                        cropper.setData(cropper.getData());
+                    },
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Add an event listener for the save button (corrected the button id)
+    const saveButton = document.getElementById('saveButton');
+    saveButton.addEventListener('click', () => {
+        // Get the cropped image data
+        const croppedDataUrl = cropper.getCroppedCanvas().toDataURL();
+
+        // Set the cropped image data to the hidden input field
+        croppedImageData.value = croppedDataUrl;
+    });
+</script>
+
+<script>
+    // Get the default crop coordinates
+const defaultCropCoordinates = {
+    x: 0,
+    y: 0,
+    width: imagePreview.clientWidth,
+    height: imagePreview.clientHeight,
+  };
+  
+  // Set the default crop coordinates when the cropper is initialized
+  cropper.setCropBoxData(defaultCropCoordinates);
+  
+  // Listen for the `cropend` event and upload the cropped image
+  cropper.on('cropend', function() {
+    // Get the cropped image data
+    const croppedImageData = cropper.getCroppedCanvas().toDataURL();
+  
+    // Upload the cropped image data to your server
+    // ...
+  });
+</script> {% endcomment %}
+
+<script>
+    const imageInput = document.getElementById('imageInput');
+    const imagePreview = document.getElementById('imagePreview');
+
+imageInput.addEventListener('change', () => {
+  const file = imageInput.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      imagePreview.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+});
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<!-- Include Bootstrap JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+
+{% endblock %}

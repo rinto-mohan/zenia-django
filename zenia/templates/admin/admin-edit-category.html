@@ -1,0 +1,55 @@
+{% extends 'admin/base1.html' %}
+{% block title %}
+Zenia Admin
+{% endblock title %}
+{% load static %}
+{% block 'body' %}
+
+<div aria-live="polite" aria-atomic="true" class="toast-container position-fixed top-0 end-0 p-3" id="toastPlacement">
+    {% for message in messages %}
+      <div class="toast align-items-center text-white bg-{{ message.tags }} border-0 pe-3" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            {{ message }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+        <section class="content-main">
+            <div class="row">
+                <div class="col-9">
+                    <div class="content-header">
+                        <h2 class="content-title">Edit Category</h2>
+                        
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <form method="post" action="{% url 'admin_edit_category' id=category.id %}" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <label class="form-label" for="category_name">Category Name:</label>
+                                <input class="form-control" type="text" value="{{category.category_name}}" name="category_name" ><br>
+                                                                            
+                        
+                                <label class="form-label" for="description">Description:</label><br>
+                                <textarea class="form-control" value="{{category.description}}" name="description" rows="4" cols="50"></textarea><br>
+                        
+                                <div class="mb-4">
+                                    <label for="category_image" class="form-label">Category Image</label>
+                                    <input type="file" name="category_image" id="category_image" class="form-control" />
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn btn-md rounded font-sm hover-up">Update</button>
+                                </div>
+                            </form>
+                        </div>                   
+                    </div> <!-- card end// -->
+                </div>
+                
+            </div>
+        </section> <!-- content-main end// -->
+
+        {% endblock %}

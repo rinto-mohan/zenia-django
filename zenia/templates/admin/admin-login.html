@@ -1,0 +1,90 @@
+{% load static %}
+{% block 'body' %}
+
+<link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/imgs/theme/favicon1.png' %}">
+
+<title>Zenia Admin Login</title>
+
+<link href="{% static 'assets1/css/main.css' %}" rel="stylesheet" type="text/css" />
+
+
+<div aria-live="polite" aria-atomic="true" class="toast-container position-fixed top-0 start-0 p-3" id="toastPlacement">
+  {% for message in messages %}
+    <div class="toast align-items-center text-white bg-{{ message.tags }} border-0 pe-3" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">
+          {{ message }}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<main class="main">
+    <div class="page-header breadcrumb-wrap">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="/admin-login" rel="nofollow">Admin Only</a>
+            </div>
+        </div>
+    </div>
+    
+   
+
+    <section class="pt-100 bg-dark pb-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-5 m-auto">
+                    <div class="row">
+                        <div class="col-lg-10">
+                            <div class="login_wrap widget-taber-content p-30 background-white border-radius-10 mb-md-5 mb-lg-0 mb-sm-5">
+                                <div class=" bg-light p-5 " style="border-radius: 5%;">
+                                    <div class="heading_s1">
+                                        <h3 class="mb-30 text-dark text-center" >Login</h3>
+                                    </div>
+                                    <form method="post" action="/admin-login">
+                                        {% csrf_token %}
+                                        <div class="form-group bg-dark p-1" style="border-top-right-radius: 10%; border-top-left-radius: 10%;">
+                                            <input class="form-control " type="text" required="" name="email" placeholder="Your Email">
+                                        </div>
+                                        <div class="form-group bg-dark p-1" style="border-bottom-right-radius: 10%; border-bottom-left-radius: 10%;" >
+                                            <input class="form-control" required="" type="password" name="password" placeholder="Password">
+                                        </div>
+                                        <div class="form-group text-center p-2">
+                                            <button type="submit" class="btn btn-danger px-5 mt-3 mb-0 hover-up" name="login">Log in</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Get all the toasts
+      var toastElements = document.querySelectorAll('.toast');
+  
+      // Loop through each toast element
+      toastElements.forEach(function (toastEl) {
+        // Create a new Bootstrap Toast object
+        var toast = new bootstrap.Toast(toastEl);
+  
+        // Show the toast
+        toast.show();
+  
+        // Automatically hide the toast after 3 seconds (adjust the time as needed)
+        setTimeout(function () {
+          toast.hide();
+        }, 5000);
+      });
+    });
+  </script>
+
+{% endblock %}
+

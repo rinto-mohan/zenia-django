@@ -1,0 +1,362 @@
+{% extends 'user/base.html' %}
+{% block title %}
+Zenia
+{% endblock title %}
+{% load static %}
+{% block 'body' %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="stylesheet" href="{% static 'assets/css/extra2.css' %}">
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<div aria-live="polite" aria-atomic="true" class="toast-container position-fixed top-0 start-0 p-3" id="toastPlacement">
+    {% for message in messages %}
+      <div class="toast align-items-center text-white bg-{{ message.tags }} border-0 pe-3" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            {{ message }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <main class="main">
+  <div class="section block-breadcrumb">
+    <div class="container"> 
+      <div class="breadcrumbs"> 
+        <ul> 
+          <li> <a href="/">Home </a></li>
+          <li> <a href="#">Cart Items</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  {% if not cart_items %}
+  <div class="container-fluid mb-5">
+    <div class="row">
+    
+     <div class="col-md-12">
+     
+         <div class="card">
+
+       <div class="card-body cart">
+           <div class="col-sm-12 empty-cart-cls text-center">
+             <img src="https://i.imgur.com/dCdflKN.png" width="130" height="130" class="img-fluid mb-4 mr-3">
+             <h3><strong>Your Cart is Empty</strong></h3>
+             <h4>Add something to make me happy :)</h4>
+             <a href="/user_shop" class="btn btn-black mt-4 mb-5" >Continue shopping</a>
+             <a href="/user_add_wishlist" class="btn btn-black mt-4 mb-5" >Add from Wishlist</a>
+           </div>
+       </div>
+   </div>
+       
+     
+     </div>
+    
+    </div>
+   
+   </div>
+   {% else %}
+   
+   <section class="section block-cart">
+     <div class="container">
+       <div class="row mt-20">
+         <div class="col-lg-7">
+           <div class="box-title-cart">
+             <h4>Your Cart</h4>
+             <h6></h6>
+          </div>
+          <div class="list-items-cart">
+            {% for cartitem in cart_items %}
+            {% if cartitem.is_active %}
+              
+            <div class="" >
+              <a href="{% url 'user_remove_cartitem' id=cartitem.product.id %}" class="" ><i class="fa-solid fa-xmark fa-2xl" style="color: #000000;"></i></a>
+            </div>
+            <div class="item-cart mb-3">
+              <div class="item-cart-image"><img src="{{ cartitem.product.product_images.url }}" alt="Guza"></div>
+              <div class="item-cart-info">
+                <div class="item-cart-info-1"><a class="text-16-medium" href="{% url 'user_product_detail' id=cartitem.product.id %}">{{ cartitem.product.product_name}}</a>
+                  <p class="body-p my-2">₹{{cartitem.product.price}}</p>
+                  {% comment %} <div class="box-info-size-color-product">
+                    <p class="box-color"><span class="body-p2 neutral-medium-dark">Color:</span><span class="body-p2 neutral-dark">Navy</span></p>
+                    <p class="box-size"><span class="body-p2 neutral-medium-dark">Size:</span><span class="body-p2 neutral-dark">S</span></p>
+                  </div> {% endcomment %} 
+                  <div class="box-form-cart">
+                    <div class="form-cart detail-qty">
+                        <a href="#" class="minus" data-action="decrement" data-product-id="{{ cartitem.product.id }}" data-product-price="{{ cartitem.product.price }}"></a>
+                        <input class="qty-val form-control" type="text" name="quantity" value="{{ cartitem.quantity }}" data-cart-item-id="{{ cartitem.id }}" min="1">
+                        
+                        {% if cartitem.product.quantity >= cartitem.quantity %}
+                        <a href="#" class="plus" data-action="increment" data-product-id="{{ cartitem.product.id }}" data-product-price="{{ cartitem.product.price }}"></a>
+                        {% endif %}
+                          
+                    </div>
+                </div>
+
+                </div>
+                <div class="item-cart-info-2">
+                  <p class="body-p2" >₹<p class="body-p2" id="productTotal{{ cartitem.product.id }}">{{cartitem.subtotal}}</p></p>
+                </div>
+              </div>
+            </div>
+
+            {% endif %}
+            {% endfor %}
+          </div>
+          
+          
+          {% comment %} <div class="box-may-also-like">
+            <h4 class="box-border-bottom mb-20">You May Also Like</h4>
+            <div class="list-items-also-like">
+              <div class="item-also-like">
+                <div class="item-also-like-image"><img src="assets/imgs/page/cart/sp3.png" alt="Guza"></div>
+                <div class="item-also-like-info">
+                  <div class="item-also-like-info-1"><a class="text-16-medium" href="#">Ball Crew Shirt</a>
+                    <p class="body-2 neutral-medium-dark mb-8">$35.00</p>
+                    <div class="box-color box-size mb-8"><span class="body-p2 neutral-medium-dark">Color:</span>
+                      <div class="dropdown">
+                        <button class="btn dropdown-toggle" id="dropdownColor" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span>Black</span></button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownColor">
+                          <li><a class="dropdown-item" href="#">Black</a></li>
+                          <li><a class="dropdown-item" href="#">Navy</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="box-size mb-8"><span class="body-p2 neutral-medium-dark">Size:</span>
+                      <div class="dropdown">
+                        <button class="btn dropdown-toggle" id="dropdownSize" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span>M</span></button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownSize">
+                          <li><a class="dropdown-item" href="#">S</a></li>
+                          <li><a class="dropdown-item" href="#">M</a></li>
+                          <li><a class="dropdown-item" href="#">XL</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="item-also-like-info-2">
+                    <div class="box-form-cart">
+                      <div class="form-cart detail-qty"><span class="minus"></span>
+                        <input class="qty-val form-control" type="text" name="quantity" value="1" min="1"><span class="plus"></span>
+                      </div><a class="btn btn-black-medium" href="#">Add to Cart</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="item-also-like">
+                <div class="item-also-like-image"><img src="assets/imgs/page/cart/sp4.png" alt="Guza"></div>
+                <div class="item-also-like-info">
+                  <div class="item-also-like-info-1"><a class="text-16-medium" href="#">Ball Crew Shirt</a>
+                    <p class="body-2 neutral-medium-dark mb-8">$35.00</p>
+                    <div class="box-color box-size mb-8"><span class="body-p2 neutral-medium-dark">Color:</span>
+                      <div class="dropdown">
+                        <button class="btn dropdown-toggle" id="dropdownColor" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span>Black</span></button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownColor">
+                          <li><a class="dropdown-item" href="#">Black</a></li>
+                          <li><a class="dropdown-item" href="#">Navy</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="box-size mb-8"><span class="body-p2 neutral-medium-dark">Size:</span>
+                      <div class="dropdown">
+                        <button class="btn dropdown-toggle" id="dropdownSize" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span>M</span></button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownSize">
+                          <li><a class="dropdown-item" href="#">S</a></li>
+                          <li><a class="dropdown-item" href="#">M</a></li>
+                          <li><a class="dropdown-item" href="#">XL</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="item-also-like-info-2">
+                    <div class="box-form-cart">
+                      <div class="form-cart detail-qty"><span class="minus"></span>
+                        <input class="qty-val form-control" type="text" name="quantity" value="1" min="1"><span class="plus"></span>
+                      </div><a class="btn btn-black-medium" href="#">Add to Cart</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="item-also-like">
+                <div class="item-also-like-image"><img src="assets/imgs/page/cart/sp5.png" alt="Guza"></div>
+                <div class="item-also-like-info">
+                  <div class="item-also-like-info-1"><a class="text-16-medium" href="#">Ball Crew Shirt</a>
+                    <p class="body-2 neutral-medium-dark mb-8">$35.00</p>
+                    <div class="box-color box-size mb-8"><span class="body-p2 neutral-medium-dark">Color:</span>
+                      <div class="dropdown">
+                        <button class="btn dropdown-toggle" id="dropdownColor" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span>Black</span></button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownColor">
+                          <li><a class="dropdown-item" href="#">Black</a></li>
+                          <li><a class="dropdown-item" href="#">Navy</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="box-size mb-8"><span class="body-p2 neutral-medium-dark">Size:</span>
+                      <div class="dropdown">
+                        <button class="btn dropdown-toggle" id="dropdownSize" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span>M</span></button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownSize">
+                          <li><a class="dropdown-item" href="#">S</a></li>
+                          <li><a class="dropdown-item" href="#">M</a></li>
+                          <li><a class="dropdown-item" href="#">XL</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="item-also-like-info-2">
+                    <div class="box-form-cart">
+                      <div class="form-cart detail-qty"><span class="minus"></span>
+                        <input class="qty-val form-control" type="text" name="quantity" value="1" min="1"><span class="plus"></span>
+                      </div><a class="btn btn-black-medium" href="#">Add to Cart</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> {% endcomment %}
+        </div>
+        <div class="col-lg-5">
+          <div class="box-detail-cart">
+            <h4 class="mb-25">Order Summary</h4>
+            <div class="box-info-cart">
+              <div class="d-flex align-items-center justify-content-between box-border-bottom">
+                <h5 class="neutral-medium-dark">Subtotal</h5>
+                
+          
+                <h5 class="neutral-dark d-flex" >₹<p id="totalDisplay">{{cart.total}}</p> </h5>
+                  
+              </div>
+              <div class="box-info-cart-inner">
+                <p class="text-17-medium text-uppercase mb-15">yay!! Free Shipping</p>
+                <div class="list-radio">
+                  <div class="item-radio">
+                    <label>
+                      <input type="radio" name="shipping" checked="checked" hidden>Shipping
+                    </label><span class="price-ship text-success">₹0.00</span>
+                  </div>
+                  <div class="item-radio">
+                    <label>
+                      {% comment %} <input type="radio" name="shipping" checked="checked" hidden>Coupon discount {% endcomment %}
+                    {% comment %} </label><span class="price-ship text-success">-&#8377;{{discount}}</span> {% endcomment %}
+                  </div>
+                  {% comment %} <div class="item-radio">
+                    <label>
+                      <input type="radio" name="shipping">Local pickup: $60.00
+                    </label>
+                  </div> {% endcomment %}
+                </div>
+                <p class="body-p2 neutral-medium-dark mb-12">No GST or other Gov tax are added.</p>
+              <form action="/user_checkout" method="post">
+                {% csrf_token %}
+              <div class="box-coupon">
+                
+                {% if applied %}
+    
+                <div class="coupon-">
+                  <input class="form-control input- text-success"  name="coupon" type="text" value="{{coupon.code}} Applied" disabled>
+                  </div>
+                </div>
+                {% else %}
+                <div class="coupon-">
+                  <input class="form-control input-" id="coupon_code" name="coupon" type="text" value="{{coupon.code}}" placeholder="Have a coupon ?" >
+                </div>
+                {% comment %} <div class="coupon-right"><a class="btn btn-border" href="#">Update Cart</a></div> {% endcomment %}
+              </div>
+              {% endif %}
+            </div>
+
+                
+              <div class="d-flex align-items-center justify-content-between box-total-bottom">
+                <h5 class="neutral-medium-dark">Total</h5>
+
+                <h5 class="neutral-dark d-flex" id="">₹<p id="grandTotalDisplay">{{cart.total}}</p></h5>
+                <input class="neutral-dark" id="grandTotalInput" value="{{cart.total}}"  name="grand_total" hidden>
+
+              </div>
+              <div class="box-button-cart"><button class="btn btn-black" type="submit" href="">Proceed To Checkout</button></div>
+              <div class="box-other-link"><a class="text-17 link-green" href="#">Free shipping on orders over &#8377;1000</a><a class="text-17" href="/user_shop">Continue Shopping</a></div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      </div>
+    </div>
+  </section>
+  
+  {% endif %}
+  {% comment %} {% for order in pending_order %}
+  <div class="card">
+    <div class="card-header">
+      You are just one step away to complete your order !
+    </div>
+    <div class="card-body">
+      <h5 class="card-title"> &#8377;{{order.order_total}} </h5>
+      <p class="card-text">Pay now using</p>
+      <a href="{% url "user_order_confirm" id=order.id %}" class="btn btn-black">Razorpay</a>
+      <a href="{% url "user_payment" id=order.id %}" class="btn btn-black">COD</a>
+    </div>
+  </div>
+  {% endfor %} {% endcomment %}
+
+  </main>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.form-cart a').on('click', function (e) {
+            e.preventDefault();
+            var action = $(this).data('action');
+            var productId = $(this).data('product-id');
+            var productPrice = $(this).data('product-price');
+            var productQuantity = $(this).data('product-quantity');
+            var $input = $(this).parent().find('input');
+
+            var count = parseInt($input.val());
+            var total = document.getElementById(`productTotal${productId}`).textContent
+
+            $input.val(count);
+
+            var productTotal = productPrice * count;
+
+            $('#productTotal' + productId).text(productTotal);
+            document.getElementById(`productTotal${productId}`).textContent = productTotal +".00"
+
+            // Send AJAX request to update cart
+            $.ajax({
+                url: '/update_cart_quantity/',
+                method: 'POST',
+                data: {
+                    csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val(),
+                    product_id: productId,
+                    quantity: count
+                },
+                success: function (response) {
+                    // Handle the response from the server if needed
+                    console.log('AJAX request successful. Response:', response);
+                    grand_total = response.grand_total
+                    console.log('grand_total',grand_total)
+                    document.getElementById('totalDisplay').textContent = grand_total 
+                    document.getElementById('grandTotalDisplay').textContent = grand_total 
+                    document.getElementById('grandTotalInput').value = grand_total;
+
+
+                },
+                error: function (xhr, status, error) {
+                    // Handle AJAX errors if needed
+                    console.error('AJAX request failed:', status, error);
+                }
+            });
+        });
+    });
+</script>
+
+
+
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends 'admin/base1.html' %}
+{% block title %}
+Zenia Admin
+{% endblock title %}
+{% load static %}
+{% block 'body' %}
+<div aria-live="polite" aria-atomic="true" class="toast-container position-fixed  end-0 p-3 mt-70" id="toastPlacement" style="z-index: 1000;">
+    {% for message in messages %}
+      <div class="toast align-items-center text-white bg-{{ message.tags }} border-0 pe-3" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            {{ message }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Order List </h2>
+        </div>
+    </div>
+    <div class="card mb-4">
+        {% comment %} <header class="card-header">
+            <div class="row gx-3">
+                <div class="col-lg-4 col-md-6 me-auto">
+                    <input type="text" placeholder="Search..." class="form-control">
+                </div>
+        </header> {% endcomment %}
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Mob Number</th>
+                            <th scope="col">Total Amount</th>
+                            <th scope="col">Payment Method</th>
+                            <th scope="col">Status</th>
+                            <th scope="col"> Order Date</th>
+                            <th scope="col"> Action </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr >
+                            <td><a href="{% url 'admin_order_details' order.id %}">{{order.order_number}}</a></td>
+                            <td><b>{{order.shipping_address.name | capfirst}} </b></td>
+                            <td>{{order.shipping_address.mobile_number}}</td>
+                            <td>{{order.order_total}}</td>
+                            <td>{{order.payment.payment_method}}</td>
+                            <td>
+                                {% if order.status == 'Delivered' %}
+                                    <span class="badge rounded-pill alert-success">Deliverd</span>
+                                {% elif order.status == 'Placed' %}
+                                    <span class="badge rounded-pill alert-success">Placed</span>
+                                {% elif order.status == 'Shipped' %}
+                                    <span class="badge rounded-pill alert-warning">Shipped</span>
+                                {% elif order.status == 'Cancelled' %}
+                                    <span class="badge rounded-pill alert-danger">Cancelled</span>
+                                {% elif order.status == 'Returned' %}
+                                    <span class="badge rounded-pill alert-danger">Returned</span>
+                                {% elif order.status == 'Return Pending' %}
+                                    <span class="badge rounded-pill alert-danger">Return Pending</span>
+                                {% endif %}
+                            </td>
+                            
+                            <td>{{order.order_date}}</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded">{{order.status}}</i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        
+                                        <a class="dropdown-item" href="{% url 'admin_update_order_status' order.id 'Accepted' %}">
+                                            <i class="bx bx-check me-1"></i> Shipping
+                                        </a>
+                                        <a class="dropdown-item" href="{% url 'admin_update_order_status' order.id 'Delivered' %}">
+                                            <i class="bx bx-user-check me-1"></i> Deliver
+                                        </a>
+                                        <a class="dropdown-item" href="{% url 'admin_update_order_status' order.id 'Return' %}">
+                                            <i class="bx bx-user-check me-1"></i> Return
+                                        </a>
+                                        <a class="dropdown-item" href="{% url 'admin_update_order_status' order.id 'Cancelled' %}">
+                                            <i class="bx bx-trash me-1"></i> Cancel
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div> <!-- table-responsive //end -->
+        </div> <!-- card-body end// -->
+    </div>
+    <div class="text-center " style="display: flex; justify-content: center; align-items: center;">
+        <nav class="box-pagination">
+          <ul class="pagination">
+              {% if orders.has_previous %}
+              <li class="page-item"><a class="page-link" href="?page={{ orders.previous_page_number }}">&larr;</a></li>
+              {% else %}
+              <li class="page-item disabled"><a class="page-link" href="#">&larr;</a></li>
+              {% endif %}
+  
+              {% for i in orders.paginator.page_range %}
+                  {% if orders.number == i %}
+                  <li class="page-item active"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                  {% else %}
+                  <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                  {% endif %}
+              {% endfor %}
+  
+              {% if orders.has_next %}
+              <li class="page-item"><a class="page-link" href="?page={{ orders.next_page_number }}">&rarr;</a></li>
+              {% else %}
+              <li class="page-item disabled"><a class="page-link" href="#">&rarr;</a></li>
+              {% endif %}
+          </ul>
+        </nav>
+    </div>
+</section>
+        
+{% endblock %}

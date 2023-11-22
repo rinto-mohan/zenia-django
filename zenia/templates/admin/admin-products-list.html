@@ -1,0 +1,132 @@
+{% extends 'admin/base1.html' %}
+{% block title %}
+Zenia Admin
+{% endblock title %}
+{% load static %}
+{% block 'body' %}
+
+<div aria-live="polite" aria-atomic="true" class="toast-container position-fixed top-0 end-0 p-3" id="toastPlacement">
+    {% for message in messages %}
+      <div class="toast align-items-center text-white bg-{{ message.tags }} border-0 pe-3" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            {{ message }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Products List</h2>
+                    <p>Lorem ipsum dolor sit amet.</p>
+                </div>
+                <div>
+                    {% comment %} <a href="#" class="btn btn-light rounded font-md">Export</a>
+                    <a href="#" class="btn btn-light rounded  font-md">Import</a> {% endcomment %}
+                    <a href="/admin-add-product" class="btn btn-primary btn-sm rounded">Create new</a>
+                </div>
+            </div>
+            <div class="card mb-4">
+                {% comment %} <header class="card-header">
+                    <div class="row align-items-center">
+                        
+                        <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
+                            <select class="form-select">
+                                <option selected>All category</option>
+                                <option>Football Boots</option>
+                                <option>Spikes</option>
+                                <option>Sports Shoes</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 col-6">
+                            <input type="date" value="02.05.2021" class="form-control">
+                        </div>
+                        <div class="col-md-2 col-6">
+                            <select class="form-select">
+                                <option selected>Status</option>
+                                <option>Active</option>
+                                <option>Disabled</option>
+                                <option>Show all</option>
+                            </select>
+                        </div>
+                    </div>
+                </header> <!-- card-header end// --> {% endcomment %}
+                <div class="card-body">
+                    {% for product in products %}
+                    <article class="itemlist">
+                        <div class="row align-items-center">
+                            
+                            <div class="col-lg-4 col-sm-4 col-8 flex-grow-1 col-name">
+                                <a class="itemside" href="#">
+                                    {% if product.product_images %}
+                                    <div class="left">
+                                        <img src="{{ product.product_images.url }}" class="img-sm img-thumbnail" alt="Item">
+                                    </div>
+                                    {% else %}
+                                    <div class="left">
+                                        <img src="{% static 'assets/imgs/shop/no-image-2.png' %}" class="img-sm img-thumbnail" alt="Item">
+                                    </div>
+                                    {% endif %}
+                                    <div class="info">
+                                        <h6 class="mb-0">{{ product.product_name }}</h6>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-lg-2 col-sm-2 col-4 col-price"> 
+                                <span>Price : {{ product.price }}</span><br>
+                                <span>Offer : {{ product.offer_price }}</span>
+                            </div>
+                            <div class="col-lg-2 col-sm-2 col-4 col-status">
+                                {% if product.category.soft_deleted  %}
+                                <span class="badge rounded-pill alert-warning">Category Disabled</span>
+                                {% elif product.soft_deleted %}
+                                <span class="badge rounded-pill alert-danger">Disabled</span>
+                                {% else %}
+                                <span class="badge rounded-pill alert-success">Active</span>
+                                {% endif %}
+                            </div>
+                            <div class="col-lg-1 col-sm-2 col-4 col-date">
+                                <span>{{ product.brand }}</span>
+                            </div>
+                            <div class="col-lg-2 col-sm-2 col-4 col-action text-end">
+                                <a href="{% url 'admin_edit_product' product_id=product.id %}" class="btn mb-2 btn-sm font-sm rounded btn-brand">
+                                    <i class="material-icons md-edit"></i> Edit
+                                </a>
+                                {% if product.category.soft_deleted  %}
+                                <a class="btn btn-sm font-sm btn-danger rounded">
+                                    <i class="material-icons md-delete_forever"></i> Category Disabled
+                                </a>
+                                {% elif product.soft_deleted %}
+                                <a href="{% url 'admin_unlist_list_product' product_id=product.id %}" class="btn btn-sm font-sm btn-danger rounded">
+                                    <i class="material-icons md-delete_forever"></i> Enable
+                                </a>
+                                {% else %}
+                                <a href="{% url 'admin_unlist_list_product' product_id=product.id %}" class="btn btn-sm font-sm btn-danger rounded">
+                                    <i class="material-icons md-delete_forever"></i> Disable
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div> <!-- row .// -->
+                    </article>
+                    {% endfor %}
+                    <!-- itemlist  .// -->
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+            {% comment %} <div class="pagination-area mt-30 mb-50">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-start">
+                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                        <li class="page-item"><a class="page-link" href="#">02</a></li>
+                        <li class="page-item"><a class="page-link" href="#">03</a></li>
+                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                        <li class="page-item"><a class="page-link" href="#">16</a></li>
+                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                    </ul>
+                </nav>
+            </div> {% endcomment %}
+        </section> <!-- content-main end// -->
+    
+{% endblock %}

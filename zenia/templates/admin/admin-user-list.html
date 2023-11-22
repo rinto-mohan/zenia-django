@@ -1,0 +1,135 @@
+{% extends 'admin/base1.html' %}
+{% block title %}
+Zenia Admin
+{% endblock title %}
+{% load static %}
+{% block 'body' %}
+
+<div aria-live="polite" aria-atomic="true" class="toast-container position-fixed top-0 end-0 p-3" id="toastPlacement">
+    {% for message in messages %}
+      <div class="toast align-items-center text-white bg-{{ message.tags }} border-0 pe-3" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            {{ message }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+
+        <section class="content-main">
+            <div class="content-header">
+                <h2 class="content-title">Users</h2>
+                <div>
+                    <a href="#" class="btn btn-primary"><i class="material-icons md-plus"></i> Create new</a>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <header class="card-header">
+                    <div class="row gx-3">
+                        <div class="col-lg-4 col-md-6 me-auto">
+                            <input type="text" placeholder="Search..." class="form-control">
+                        </div>
+                        <div class="col-lg-2 col-md-3 col-6">
+                            <select class="form-select">
+                                <option>Status</option>
+                                <option>Active</option>
+                                <option>Disabled</option>
+                                <option>Show all</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-3 col-6">
+                            <select class="form-select">
+                                <option>Show 20</option>
+                                <option>Show 30</option>
+                                <option>Show 40</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                </header>
+                 <!-- card-header end// -->
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Mobile</th>
+                                    <th>Email</th>
+                                    <th>Status</th>
+                                    <th>Registered</th>
+                                    <th>Last Login</th>
+                                    <th class="text-end"> Action </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for user in users %}
+                                {% if user.is_active %}
+                                <tr>
+                                    <td width="15%">
+                                        <a href="#" class="itemside">
+                                            <div class="info pl-3 ">
+                                                <h6 class="mb-0 title">{{ user.username }}</h6>
+                                                <small class="text-muted">User ID: {{ user.id }}</small>
+                                            </div>
+                                        </a>
+                                    </td>
+                                    <td>{{user.mobile}}</td>
+                                    <td>{{user.email}}</td>
+                                    
+                                    <td><span class="badge rounded-pill alert-success">Active</span></td>
+                                    {% else %}
+                                    <tr>
+                                        <td width="15%" bg-danger>
+                                            <a href="#" class="itemside">
+                                                <div class="info  pl-3 ">
+                                                    <h6 class="mb-0 title">{{ user.username }}</h6>
+                                                    <small class="text-muted">User ID: {{ user.id }}</small>
+                                                </div>
+                                            </a>
+                                        </td>
+                                        <td>{{user.mobile}}</td>
+                                        <td>{{user.email}}</td>
+                                    <td><span class="badge rounded-pill alert-danger">Inactive</span></td>
+                                    {% endif %}
+                                    <td>{{ user.date_joined }}</td>
+                                    <td>{{ user.last_login }}</td>
+                                    <td>
+                                       
+                                        {% if user.is_blocked %}
+                                        <a href="{% url 'admin_user_block_unblock' id=user.id %}" class="btn btn-sm font-sm btn-success rounded">
+                                            <i class="material-icons md-delete_forever"></i> Unblock
+                                        </a>
+                                        {% else %}
+                                        <a href="{% url 'admin_user_block_unblock' id=user.id %}" class="btn btn-sm font-sm btn-danger rounded">
+                                            <i class="material-icons md-delete_forever"></i> Block
+                                        </a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                
+                            </tbody>
+                        </table> <!-- table-responsive.// -->
+                    </div>
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+            <div class="pagination-area mt-15 mb-50">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-start">
+                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                        <li class="page-item"><a class="page-link" href="#">02</a></li>
+                        <li class="page-item"><a class="page-link" href="#">03</a></li>
+                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                        <li class="page-item"><a class="page-link" href="#">16</a></li>
+                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </section> <!-- content-main end// -->
+
+        {% endblock %}

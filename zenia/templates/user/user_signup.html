@@ -1,0 +1,108 @@
+{% extends 'user/base.html' %}
+{% block title %}
+Zenia
+{% endblock title %}
+{% load static %}
+{% block 'body' %}
+
+
+<div aria-live="polite" aria-atomic="true" class="toast-container position-fixed  end-0 p-3 mt-70" id="toastPlacement" style="z-index: 1000;">
+  {% for message in messages %}
+    <div class="toast align-items-center text-white bg-{{ message.tags }} border-0 pe-3" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">
+          {{ message }}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+  <style>
+    .box-account{
+        margin-top:70px;
+        margin-bottom: 50px;
+    }
+  </style>
+  <div class="container box-account">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div class="box-account">                
+                <div class="box-account-wrapper"><a class="btn-close-popup btn-close-popup-account" href="#">
+                    
+                  <div class="form-account-info"><a class="button-tab btn-for-login" href="/user_login">Login</a><a class="button-tab btn-for-signup active mb-3" href="">Sign up</a>
+                    <form method="POST" action="{% url 'user_signup' %}">
+                      {% csrf_token %}
+                      <div class="form-group">
+                          {{sform.first_name}}
+                          {% if sform.first_name.errors %}
+                          <span class="text-danger">{{ sform.first_name.errors.0 }}</span>
+                          {% endif %} 
+                      </div>
+                      <div class="form-group">
+                          {{sform.last_name}}
+                          {% if sform.last_name.errors %}
+                          <span class="text-danger">{{ sform.last_name.errors.0 }}</span>
+                          {% endif %} 
+                      </div>
+                      <div class="form-group">
+                          {{sform.email}}
+                          {% if sform.email.errors %}
+                          <span class="text-danger">{{ sform.email.errors.0 }}</span>
+                          {% endif %}  
+                      </div>
+                      <div class="form-group">
+                          {{sform.mobile}}
+                          {% if sform.mobile.errors %}
+                          <span class="text-danger">{{ sform.mobile.errors.0 }}</span>
+                          {% endif %}  
+                      </div>
+                      <div class="form-group">
+                          {{sform.password}}
+                          {% if sform.password.errors %}
+                          <span class="text-danger">{{ sform.password.errors.0 }}</span>
+                          {% endif %}                   
+                        </div>
+                      <div class="form-group">
+                        {{sform.confirm_password}}
+                        {% if sform.confirm_password.errors %}
+                        <p class="text-danger">{{ sform.confirm_password.errors.0 }}</p>
+                        {% endif %} 
+                      </div>
+                    
+                    <div class="form-group">
+                      <button type="submit" class="btn btn-black d-block">Create my account</button>
+                    </div>
+                  </form>
+                       
+                      <div class="text-center">
+                        <p class="body-p2 neutral-medium-dark">Already have an account?<a class="neutral-dark login-now" href="#">Login Now</a></p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-password-info">
+                    <h5>Recover password</h5>
+                    <div class="form-login">
+                      <div class="form-group">
+                        <input class="form-control" type="text" placeholder="Enter your email">
+                      </div>
+                      <div class="form-group">
+                        <button class="btn btn-black d-block">Recover</button>
+                      </div>
+                      <div class="text-center">
+                        <p class="body-p2 neutral-medium-dark">Already have an account?<a class="neutral-dark login-now" href="#">Login Now</a></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+         <div class="col-md-4"></div>
+    </div>
+  </div>
+  
+
+  {% endblock %}
+
+

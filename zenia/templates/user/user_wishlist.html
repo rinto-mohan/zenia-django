@@ -1,0 +1,130 @@
+{% extends 'user/base.html' %}
+{% block title %}
+Zenia
+{% endblock title %}
+{% load static %}
+{% block 'body' %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="stylesheet" href="{% static 'assets/css/extra2.css' %}">
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<div aria-live="polite" aria-atomic="true" class="toast-container position-fixed  end-0 p-3 mt-70" id="toastPlacement" style="z-index: 1000;">
+  {% for message in messages %}
+    <div class="toast align-items-center text-white bg-{{ message.tags }} border-0 pe-3" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">
+          {{ message }}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+  <main class="main">
+  <div class="section block-breadcrumb">
+    <div class="container"> 
+      <div class="breadcrumbs"> 
+        <ul> 
+          <li> <a href="/">Home </a></li>
+          <li> <a href="#">Cart Items</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  {% if not wishlist %}
+  <div class="container-fluid mb-5">
+    <div class="row">
+    
+     <div class="col-md-12">
+     
+         <div class="card">
+
+       <div class="card-body cart">
+           <div class="col-sm-12 empty-cart-cls text-center">
+             <img src="https://i.imgur.com/dCdflKN.png" width="130" height="130" class="img-fluid mb-4 mr-3">
+             <h3><strong>Your Wishlist is Empty</strong></h3>
+             <h4>Add something to make me happy :)</h4>
+             <a href="/user_shop" class="btn btn-black mt-4 mb-5" >Continue shopping</a>
+           </div>
+       </div>
+   </div>
+       
+     
+     </div>
+    
+    </div>
+   
+   </div>
+   {% else %}
+   
+   <section class="section block-cart">
+     <div class="container">
+       <div class="row mt-20">
+         <div class="col-lg-7">
+           <div class="box-title-cart">
+             <h4>Your Wishlist</h4>
+             <h6></h6>
+          </div>
+          <div class="list-items-cart">
+            {% for item in wishlist %}
+            
+            {% if not item.product.soft_deleted %}
+                
+                
+            <div class="" >
+              <a href="{% url 'user_remove_wishlist' id=product.id %}" class="" ><i class="fa-solid fa-xmark fa-2xl" style="color: #000000;"></i></a>
+            </div>
+            <div class="item-cart mb-3">
+              <div class="item-cart-image"><img src="{{ item.product.product_images.url }}" alt="Guza"></div>
+              <div class="item-cart-info">
+                <div class="item-cart-info-1"><a class="text-16-medium" href="{% url 'user_product_detail' id=item.product.id %}">{{ item.product.product_name}}</a>
+                  <p class="body-p my-2">&#8377;{{item.product.price}}</p>
+                </div>
+                <div class="item-cart-info-2">
+                  <p class="body-p2" id="productTotal{{ item.product.id }}">&#8377;{{item.subtotal}}</p>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+
+            {% endfor %}
+          </div>
+          <form action="/user_coupon" method="post">
+            {% csrf_token %}
+          <div class="box-coupon">
+            
+            {% if applied %}
+
+            <div class="coupon-left">
+              <input class="form-control input-coupon text-success" id="coupon_code" name="coupon" type="text" value="{{coupon.code}} Applied" disabled>
+              </div>
+            </div>
+            {% else %}
+            <div class="coupon-left">
+              <input class="form-control input-coupon" id="coupon_code" name="coupon" type="text" placeholder="Coupon code" required>
+              <button class="btn btn-border" type="submit" >Apply</button>
+            </div>
+            {% comment %} <div class="coupon-right"><a class="btn btn-border" href="#">Update Cart</a></div> {% endcomment %}
+          </div>
+          {% endif %}
+            
+          </form>
+        </div>
+  
+      </div>
+    </div>
+  </section>
+  
+  {% endif %}
+
+
+
+ 
+
+{% endblock %}

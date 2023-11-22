@@ -1,0 +1,413 @@
+
+{% extends 'user/base.html' %}
+{% block title %}
+Zenia
+{% endblock title %}
+{% load static %}
+{% block 'body' %}
+
+<div aria-live="polite" aria-atomic="true" class="toast-container position-fixed  end-0 p-3 mt-70" id="toastPlacement" style="z-index: 1000;">
+  {% for message in messages %}
+    <div class="toast align-items-center text-white bg-{{ message.tags }} border-0 pe-3" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body">
+          {{ message }}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+
+      <main class="main">
+        <div class="section block-breadcrumb">
+          <div class="container"> 
+            <div class="breadcrumbs"> 
+              <ul> 
+                <li> <a href="/">Home </a></li>
+                <li> <a href="#">Checkout</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <section class="section block-cart">
+          <div class="container mb-100 mt-60">
+
+            <form action="#"> 
+              <div class="row mt-20"> 
+                <div class="col-lg-6">
+                        <div class="mb-25">
+                            <h4>Default Address</h4>
+                        </div>
+                        
+                        <div class="container">
+                            <div class="row">
+                                {% for address in addresses %}
+                                {% if address.is_billing %}
+                        <div class="col-lg-12 mb-3 hover-up">
+                            <div class="card mb-3 mb-lg-0">
+                                <div class="card-header bg-grey">
+                                    
+                                    <h5 class="mb-0 text-primary"> Shipping Address</h5>
+                                    
+                                </div>
+                                <div class="card-body">
+                                    <address class="text-dark">{{address.name}}<br>{{address.address_1}}<br>{{address.address_2}}<br>{{address.pin}}<br>{{address.city}}</address>
+                                    <p>{{address.state}}</p>
+                                    <p class="text-primary">{{address.mobile_number}}</p>
+                                    <a type="button" data-bs-toggle="modal" data-bs-target="#editModal{{address.id}}" data-bs-whatever="" class=" mb-1 btn-black"><p class="text-danger mt-3" >--Edit</p></a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                  <div class="modal fade" id="editModal{{address.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Address</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          <form method="post" action="{% url 'user_edit_address' address_id=address.id %}">
+                              {% csrf_token %}
+                              <label for="name">Name:</label>
+                              <input class="form-control" type="text" id="name" name="name" value="{{address.name}}">
+                              <br>
+                              
+                              <label for="city">City:</label>
+                              <input class="form-control" type="text" id="city" name="city" value="{{address.city}}">
+                              <br>
+                      
+                              <label for="address_1">Address line 1:</label>
+                              <input class="form-control" type="text" id="address_1" name="address_1" value="{{address.address_1}}"  required>
+                              <br>
+                      
+                              <label for="address_2">Address line 2:</label>
+                              <input class="form-control" type="text" id="address_2" name="address_2" value="{{address.address_2}}" required>
+                              <br>
+                      
+                              <label for="state">State:</label>
+                              <select class="form-control" id="state" name="state" value="">
+                                  <option value="" disabled selected>Select State</option>
+                                  {% for state_choice in state_choices %}
+                                      <option value="{{ address.state_choice }}">{{ state_choice.1 }}</option>
+                                  {% endfor %}
+                              </select>
+                              <br>
+                      
+                              <label for="pin">PIN:</label>
+                              <input class="form-control" class="form-control" type="text" id="pin" name="pin" value="{{address.pin}}">
+                              <br>
+                      
+                              <label for="mobile_number">Mobile Number:</label>
+                              <input class="form-control" type="text" id="mobile_number" name="mobile_number" value="{{address.mobile_number}}">
+                              <br>
+                              <div class="login_footer form-group">
+                                <div class="chek-form">
+                                    <div class="custome-checkbox">
+                                        <input class="form-check-input" type="checkbox" name="is_billing" id="exampleCheckbox12" value="1" {% if address.is_billing %}checked{% endif %}>
+                                        <label class="form-check-label" for="exampleCheckbox12"><span>Set as Default Address</span></label>
+                                    </div>
+                                </div>
+                            </div>
+                          
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-black" data-bs-dismiss="modal">Close</button>
+                          <button type="submit" class="btn btn-black">Save Changes</button>
+                        </div>
+                      </form>
+                      </div>
+                    </div>
+                </div>
+                  {% endfor %}
+                  <div class="mb-25 me-0">
+                    <h4>Other Address</h4>
+                  </div>
+                  {% for address in addresses %}
+                  {% if not address.is_billing %}
+                <div class="col-lg-12 mb-3 hover-up">
+                    <div class="card mb-3 mb-lg-0">
+                       
+                            <div class="card-header bg-white">
+                            <h5 class="mb-0">Address</h5>
+                           
+                        </div>
+                        <div class="card-body">
+                            <address class="text-dark">{{address.name}}<br>{{address.address_1}}<br>{{address.address_2}}<br>{{address.pin}}<br>{{address.city}}</address>
+                            <p>{{address.state}}</p>
+                            <p class="text-primary">{{address.mobile_number}}</p>
+                            <a type="button" data-bs-toggle="modal" data-bs-target="#editModal{{address.id}}" data-bs-whatever="" class="mb-1 btn-black"><p class="text-danger mt-3" >--Edit</p></a>
+                           
+                            <a type="button"  href="{% url "user_default_address" id=address.id %}" class="btn btn-small"><p class="text-danger">--Set as Default Billing Address</p></a>
+                            
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+                <div class="col-lg-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Add Address</h5>
+                        </div>
+                        <div class="card-body ps-5 ms-4 align-items-center !important">
+                            <a  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"><img  class="ms-4 profile-plus-icon" src="https://img.icons8.com/pastel-glyph/64/add.png" alt="add"/></a>
+                            
+
+                            {% comment %} add address modal {% endcomment %}
+
+
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">New Address</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <form method="post" action="{% url 'user_add_address' %}">
+                                        {% csrf_token %}
+                                        <label for="name">Name:</label>
+                                        <input class="form-control" type="text" id="name" name="name" required>
+                                        <br>
+                                        
+                                        <label for="city">City:</label>
+                                        <input class="form-control" type="text" id="city" name="city" required>
+                                        <br>
+                                
+                                        <label for="address_1">Address line 1:</label>
+                                        <input class="form-control" type="text" id="address_1" name="address_1" required>
+                                        <br>
+                                
+                                        <label for="address_2">Address line 2:</label>
+                                        <input class="form-control" type="text" id="address_2" name="address_2" required>
+                                        <br>
+                                
+                                        <label for="state">State:</label>
+                                        <select class="form-control" id="state" name="state" required>
+                                            <option value="" disabled selected>Select State</option>
+                                            {% for state_choice in state_choices %}
+                                                <option value="{{ state_choice.0 }}">{{ state_choice.1 }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <br>
+                                
+                                        <label for="pin">PIN:</label>
+                                        <input class="form-control" type="text" id="pin" name="pin" required>
+                                        <br>
+                                
+                                        <label for="mobile_number">Mobile Number:</label>
+                                        <input class="form-control" type="text" id="mobile_number" name="mobile_number" required>
+                                        <br>
+                                        <div class="login_footer form-group">
+                                            <div class="chek-form">
+                                                <div class="custome-checkbox">
+                                                    <input class="form-check-input" type="checkbox" name="is_billing" id="exampleCheckbox12" value="1" {% if address.is_billing %}checked{% endif %}>
+                                                    <label class="form-check-label" for="exampleCheckbox12"><span>Set as Default Address</span></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-black" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-black">Save Address</button>
+                                  </div>
+                                </form>
+                                </div>
+                              </div>
+
+                              {% comment %} modal end {% endcomment %}
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                  {% comment %} <div class="box-title-checkout mt-30">
+                    <h4 class="mb-25">Billing Details</h4>
+                    <h5 class="mb-20">Contact information</h5>
+                  </div>
+                  <div class="box-form-checkout form-comment"> 
+                    <div class="form-group"> 
+                      <label class="form-label" for="email">Email Address *</label>
+                      <input class="form-control" id="email" type="text">
+                      <label class="mt-12">
+                        <input class="cb-left" type="checkbox">Email me with news and offers 
+                      </label>
+                    </div>
+                    <h4 class="mt-32 mb-25">Shipping address </h4>
+                    <div class="row"> 
+                      <div class="col-lg-6"> 
+                        <div class="form-group"> 
+                          <label class="form-label" for="firstname">First Name *</label>
+                          <input class="form-control" id="firstname" type="text">
+                        </div>
+                      </div>
+                      <div class="col-lg-6"> 
+                        <div class="form-group"> 
+                          <label class="form-label" for="lastname">Last Name *</label>
+                          <input class="form-control" id="lastname" type="text">
+                        </div>
+                      </div>
+                      <div class="col-lg-12"> 
+                        <div class="form-group"> 
+                          <label class="form-label" for="region">Country / Region *</label>
+                          <input class="form-control" id="region" type="text" value="United Kingdoom (UK)">
+                        </div>
+                      </div>
+                      <div class="col-lg-12"> 
+                        <div class="form-group"> 
+                          <label class="form-label" for="address">Street Address *</label>
+                          <input class="form-control" id="address" type="text">
+                        </div>
+                      </div>
+                      <div class="col-lg-12"> 
+                        <div class="form-group"> 
+                          <label class="form-label" for="apartment">Apartment, suite, unit, etc. (optional)</label>
+                          <input class="form-control" id="apartment" type="text">
+                        </div>
+                      </div>
+                      <div class="col-lg-12"> 
+                        <div class="form-group"> 
+                          <label class="form-label" for="towncity">Town / City *</label>
+                          <input class="form-control" id="towncity" type="text">
+                        </div>
+                      </div>
+                      <div class="col-lg-12"> 
+                        <div class="form-group"> 
+                          <label class="form-label" for="country">Country (optional)</label>
+                          <input class="form-control" id="country" type="text">
+                        </div>
+                      </div>
+                      <div class="col-lg-12"> 
+                        <div class="form-group"> 
+                          <label class="form-label" for="postcode">Postcode *</label>
+                          <input class="form-control" id="postcode" type="text">
+                        </div>
+                      </div>
+                      <div class="col-lg-12"> 
+                        <div class="form-group"> 
+                          <label class="form-label" for="phone">Phone *</label>
+                          <input class="form-control" id="phone" type="text">
+                        </div>
+                      </div>
+                      <div class="col-lg-12"> 
+                        <div class="form-group"> 
+                          <label>
+                            <input class="cb-left" type="checkbox">Create an account? 
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-lg-12"> 
+                        <div class="form-group"> 
+                          <label> 
+                            <input class="cb-left" type="checkbox">Ship to a different address?
+                          </label>
+                        </div>
+                      </div>
+                      <div class="col-lg-12"> 
+                        <div class="form-group"> 
+                          <label class="form-label" for="ordernote">Order Note (optional)</label>
+                          <textarea class="form-control" id="ordernote" rows="6"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div> {% endcomment %}
+                </div>
+            </div>
+        </div>
+                <div class="col-lg-6">
+                  <div class="box-detail-cart">
+                    <h4 class="mb-25">Your Order</h4>
+                    <div class="box-info-cart"> 
+                      <p class="text-17-medium text-uppercase">Product</p>
+                      <div class="box-info-checkout-inner">
+                        <div class="list-items-cart"> 
+                            {% for cartitem in cart_items %}
+                          <div class="item-cart"> 
+                            <div class="item-cart-image"><img src="{{cartitem.product.product_images.url}}" alt="Guza"></div>
+                            <div class="item-cart-info">
+                              <div class="item-cart-info-1">  <a class="text-17-medium" href="#">{{cartitem.product.product_name}} - x {{cartitem.quantity}}</a>
+                                <p>{{cartitem.product.name}}</p>
+                               {% comment %} <p class="box-color"><span class="body-p2 neutral-medium-dark">Color: </span><span class="body-p2 neutral-dark">Navy </span></p>
+                                <p class="box-size"> <span class="body-p2 neutral-medium-dark">Size:  </span><span class="body-p2 neutral-dark">S  </span></p>  {% endcomment %}
+                              </div>
+                              <div class="item-cart-info-2"> 
+                                <p class="body-p2">&#8377;{{cartitem.product.price}}</p>
+                              </div>
+                            </div>
+                          </div>
+                          {% endfor %}
+                        </div>
+                      </div>
+                      <div class="d-flex align-items-center justify-content-between box-border-bottom">
+                        <h5 class="neutral-medium-dark">Subtotal</h5>
+                        
+                        <h5 class="neutral-dark">&#8377;{{cart.total}}</h5>
+                      </div>
+                      <div class="box-info-cart-inner">
+                        <p class="text-17-medium text-uppercase mb-15">yay!! Free Shipping</p>
+                        <div class="list-radio"> 
+                          <div class="item-radio">
+                            <label>
+                                <input type="radio" name="shipping" checked="checked" hidden>Shipping
+                                </label><span class="price-ship text-success">&#8377;0.00</span>
+                          </div>
+                          
+                          {% if discount_price %}
+                            
+                          <div class="item-radio">
+                            <label>
+                                <input type="radio" name="shipping" checked="checked" hidden>Coupon discount
+                                </label><span class="price-ship text-success">-&#8377;{{discount_price}}</span>
+                          </div>
+                          {% endif %}
+                            
+                        </div>
+                      </div>
+                      <div class="d-flex align-items-center justify-content-between box-border-bottom">
+                        <h5 class="neutral-medium-dark">Total</h5>
+                        <h5 class="color-9">&#8377;{{cart.grand_total}}</h5>
+                      </div>
+                      {% comment %} <div class="box-other-link text-start box-border-bottom"><span class="text-17 link-green">Free shipping on orders over 1000.00</span><a class="text-17" href="/user_shop">Continue Shopping</a></div> {% endcomment %}
+                        
+                      <div class="box-desc-checkout"> 
+                        <p class="body-p2 neutral-medium-dark mb-20">Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our privacy policy.</p>
+                        <div class="form-group"> 
+                          {% comment %} <label>
+                            <input class="cb-left" type="checkbox">I agree to the website <a href="#">terms and conditions *</a>
+                          </label> {% endcomment %}
+                        </div>
+                      </div>
+                      <form method="post" action="{% url 'user_place_order' %}">
+                        {% csrf_token %}
+                        <textarea class="form-control mb-3" name="order_note" id="" cols="50" rows="3" placeholder="Your additional information will help us."></textarea>
+                       
+                          <h6 class="text-danger mt-0 mb-3" >Place your order using :</h6>
+                        <div class="box-button-checkout "> 
+                          <button class="btn btn-black mb-2" type="submit" value="cod" name="button_value">Go Cash On Delivery</button> 
+                          <button class="btn btn-black mb-2" type="submit" value="" name="button_value">Razorpay | UPI,CREDIT/DEBIT</button>
+                          {% if wallet.balance >= cart.grand_total %}
+                          
+                          <button class="btn btn-black text-center" type="submit" value="wallet" name="button_value">
+                            <img width="20" height="20" class="" src="https://play-lh.googleusercontent.com/FYKnN7m-XNElQs7BLOKcwh4JLLOG7BCACHxYeZLeyNK6ZddGGDZdm3osk4IIMuoPXPY=w240-h480-rw" alt="">
+                            Z-Money  ₹{{wallet.balance}}
+                          </button>
+                          {% endif %}
+                          
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+            
+          </div>
+        </section>
+      </main>
+
+
+
+{% endblock %}

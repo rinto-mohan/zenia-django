@@ -1,0 +1,162 @@
+{% extends 'admin/base1.html' %}
+{% block title %}
+Zenia Admin
+{% endblock title %}
+{% load static %}
+{% block 'body' %}
+
+
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Dashboard </h2>
+            <p>Whole data about your business here</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card card-body mb-4">
+                <article class="icontext">
+                    <span class="icon icon-sm rounded-circle bg-primary-light"><i class="text-primary material-icons md-monetization_on"></i></span>
+                    <div class="text">
+                        <h6 class="mb-1 card-title">Revenue</h6>
+                        <span>&#8377;&nbsp;{{total_revenue}}</span>
+                        <span class="text-sm">
+                            Total Revenue
+                        </span>
+                    </div>
+                </article>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card card-body mb-4">
+                <article class="icontext">
+                    <span class="icon icon-sm rounded-circle bg-success-light"><i class="text-success material-icons md-local_shipping"></i></span>
+                    <div class="text">
+                        <h6 class="mb-1 card-title">Orders</h6> <span>{{total_orders}}</span>
+                        <span class="text-sm">
+                            Total orders
+                        </span>
+                    </div>
+                </article>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card card-body mb-4">
+                <article class="icontext">
+                    <span class="icon icon-sm rounded-circle bg-warning-light"><i class="text-warning material-icons md-qr_code"></i></span>
+                    <div class="text">
+                        <h6 class="mb-1 card-title">Products</h6> <span>{{total_products}}</span>
+                        <span class="text-sm">
+                            From all Categories
+                        </span>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+   
+    <div class="row">
+        <div class="col-xl-8 col-lg-12">
+            <div class="card mb-4">
+                <article class="card-body">
+                    <h5 class="card-title">Sale statistics</h5>
+                    <canvas id="myChart" height="120px"></canvas>
+                </article>
+            </div>
+        </div>
+        <div class="col-xl-4 col-lg-12">
+            <div class="card mb-4">
+                <article class="card-body">
+                    <h5 class="card-title">Monthly Revenue</h5>
+                    <ul class="verti-timeline list-unstyled font-sm">
+                        {% for report in monthly_report %}
+                        <li class="event-list">
+                            <div class="event-timeline-dot">
+                                <i class="material-icons md-play_circle_outline font-xxl"></i>
+                            </div>
+                            <div class="media">
+                                <div class="me-3">
+                                    <h6><span>{{ report.month|date:"F Y"}}</span> <i class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i></h6>
+                                </div>
+                                <div class="media-body">
+                                    <div>
+                                        Total Revenue&#8377;&nbsp;{{report.total_revenue}}
+                                    </div>
+                                    
+                                    <div>
+                                        orders:{{report.total_orders}}
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </article>
+            </div>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <header class="card-header">
+            <h4 class="card-title">Latest orders</h4>
+        </header>
+        <div class="card-body">
+            <div class="table-responsive">
+                <div class="table-responsive">
+                    <table class="table align-middle table-nowrap mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Order ID</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Mob Number</th>
+                                <th scope="col">Total Amount</th>
+                                <th scope="col">Payment Method</th>
+                                <th scope="col">Status</th>
+                                <th scope="col"> Order Date</th>
+                                <th scope="col"> View Details </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in last_orders %}
+                            <tr >
+                                <td>{{order.order_number}}</td>
+                                <td><b>{{order.shipping_address.name | capfirst}} </b></td>
+                                <td>{{order.shipping_address.mobile_number}}</td>
+                                <td>{{order.order_total}}</td>
+                                <td>{{order.payment.payment_method}}</td>
+                                <td>
+                                    {% if order.status == 'Delivered' %}
+                                        <span class="badge rounded-pill alert-success">Deliverd</span>
+                                    {% elif order.status == 'Order Placed' %}
+                                        <span class="badge rounded-pill alert-success">Placed</span>
+                                    {% elif order.status == 'Shipped' %}
+                                        <span class="badge rounded-pill alert-warning">Shipped</span>
+                                    {% elif order.status == 'Cancelled' %}
+                                        <span class="badge rounded-pill alert-danger">Cancelled</span>
+                                    {% elif order.status == 'Returned' %}
+                                        <span class="badge rounded-pill alert-danger">Returned</span>
+                                    {% elif order.status == 'Return Pending' %}
+                                        <span class="badge rounded-pill alert-danger">Return Pending</span>
+                                    {% elif order.status == 'Payment Pending' %}
+                                        <span class="badge rounded-pill alert-warning">Payment Pending</span>
+                                    {% endif %}
+                                </td>
+                                
+                                <td>{{order.order_date}}</td>
+                                <td>
+                                    <a href="{% url 'admin_order_details' order.id %}" class="btn btn-xs"> View details</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div> <!-- table-responsive end// -->
+        </div>
+    </div>
+    
+    
+</section>
+        
+
+{% endblock  %}

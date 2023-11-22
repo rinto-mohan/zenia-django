@@ -1,0 +1,171 @@
+{% load static %}
+
+<div class="container mt-5 mb-5">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-7">
+        <div class="card">
+          <div class="text-left logo mt-3 px-5">
+            <img src="{% static 'assets/imgs/theme/logo1.png' %}" width="100" />
+          </div>
+          <div class="invoice p-5 ">
+            <h5>Your order Confirmed!</h5> <span class="font-weight-bold d-block mt-4">Hello, {{request.user.username}}</span> <span>You order has been confirmed and will be shipped in next two days!</span>
+            <div class="payment border-top mt-3 mb-3 border-bottom table-responsive">
+              <table class="table table-borderless">
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="py-2">
+                        <span class="d-block text-muted">Order Date</span> <span>{{order.order_date}}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="py-2">
+                        <span class="d-block text-muted">Order No</span> <span>{{order.order_number}}</span>
+                      </div>
+                    </td>
+                    {% if cod %}
+                    <td>
+                      <div class="py-2">
+                        <span class="d-block text-muted">Payment</span> <span>COD</span>
+                      </div>
+                    </td>
+                    {% elif wallet %}
+                    <td>
+                      <div class="py-2">
+                        <span class="d-block text-muted">Payment</span> <span>Z-wallet</span>
+                      </div>
+                    </td>
+                    {% else %}
+                    <td>
+                      <div class="py-2">
+                        <span class="d-block text-muted">Payment</span> <span>UPI - Razorpay</span>
+                      </div>
+                    </td>
+                    {% endif %}
+                    <td>
+                      <div class="py-2">
+                        <span class="d-block text-muted">Shiping Address</span> <span>{{order.shipping_address}}</span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="product border-bottom col-md-12   table-responsive">
+              <div class="col-md-12">
+              <table class="table table-borderless">
+                <tbody>
+                  {% for order_item in order_items %}
+                  <tr>
+                    <td width="60%">
+                      <img src="{{order_item.product.product_images.url}}" width="50" />
+                    </td>
+                    <td width="60%">
+                      <span class="font-weight-bold">{{order_item.product.product_name}}</span>
+                      <div class="product-qty">
+                        <span class="d-block">Quantity:{{order_item.quantity}}</span> 
+                        {% comment %} <span>Color:Dark</span> {% endcomment %}
+                      </div>
+                    </td>
+                    <td width="20%">
+                      <div class="text-right">
+                        <span class="font-weight-bold">{{order_item.subtotal}}</span>
+                      </div>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+             </div>
+            <div class="col-md-7">
+              <table class="table table-borderless">
+                <tbody class="totals">
+                  <tr>
+                    <td>
+                      <div class="text-left">
+                        <span class="text-muted">Shipping Fee</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="text-right">
+                        <span>Free</span>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="text-left">
+                        <span class="text-muted">Total</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="text-right">
+                        <span>0.5%</span>
+                      </div>
+                    </td>
+                  </tr>
+                  {% if order.coupon.discount %}
+                  <tr>
+                    <td>
+                      <div class="text-left">
+                        <span class="text-muted">Discount</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="text-right">
+                        <span class="text-success">{{ order.coupon.discount }}</span>
+                      </div>
+                    </td>
+                  </tr>
+                  {% endif %}
+                  <tr class="border-top border-bottom">
+                    <td>
+                      <div class="text-left">
+                        <span class="font-weight-bold">Total</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="text-right">
+                        <span class="font-weight-bold">{{order.order_total}}</span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+            
+            <p>We will be sending shipping confirmation email when the item shipped successfully!</p>
+            <p class="font-weight-bold mb-0">Thanks for shopping with us!</p> <span>Zenia Team</span>
+          </div>
+          <div class="ps-5 py-3 d-flex">
+            <p class="text-primary me-2">Download Invoice</p><a href="{% url 'generate_invoice_pdf' order_id=order.id %}"> <i class="fa-solid fa-2xl fa-file-arrow-down" style="color: #6b6b6b;"></i></a> 
+          </div>
+          <div class="d-flex justify-content-between footer p-3">
+            <span>Need Help? visit our <a href="#">help center</a></span> <span>12 June, 2020</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <button type="button" class="btn btn-primary m-5" onclick="download()" >download</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+<script>
+function download () {
+    var element = document.querySelector('.content-main');
+        let randomNumber = Math.floor(Math.random() * (10000000000 - 1)) + 1;
+        var opt = { 
+            margin: 0,
+            filename: 'SalesReport' + randomNumber + '.pdf',
+            html2canvas: { scale: 2 }, // Adjust the scale as needed
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+
+        html2pdf().set(opt).from(element).save();
+}
+</script>

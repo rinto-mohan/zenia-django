@@ -1,0 +1,131 @@
+{% extends 'admin/base1.html' %}
+{% block title %}
+Zenia Admin
+{% endblock title %}
+{% load static %}
+{% block 'body' %}
+
+<div aria-live="polite" aria-atomic="true" class="toast-container position-fixed top-0 end-0 p-3" id="toastPlacement">
+    {% for message in messages %}
+      <div class="toast align-items-center text-white bg-{{ message.tags }} border-0 pe-3" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            {{ message }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+        <section class="content-main">
+            <div class="row">
+                <div class="col-9">
+                    <div class="content-header">
+                        <h2 class="content-title">Add New Product</h2>
+                        
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="card mb-4">
+                        <div class="card-header px-5 d-flex justify-content-between">
+                            <h4 class="" >Basic</h4>
+                            <h4 class="mx-5 px-5" >Media</h4>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" class="row"  action="/admin-add-product" enctype="multipart/form-data">
+                                <div class="col-4">
+                                {% csrf_token %}
+                                <label class="form-label" for="product_name">Product Name:</label>
+                                <input class="form-control" type="text"  name="product_name" required><br>
+                        
+                                <label class="form-label" for="category">Category:</label>
+                                <select class="form-control"  name="category" required>
+                                    {% for category in categories %}
+                                    <option value="1">{{category.category_name}} </option>
+                                    {% endfor %}
+                                    
+                                    <!-- Add more options as needed -->
+                                </select><br>
+                        
+                                <label class="form-label" for="brand">Brand:</label>
+                                <input class="form-control" type="text"  name="brand"><br>
+                        
+                                <label class="form-label" for="description">Description:</label><br>
+                                <textarea class="form-control"  name="description" rows="4" cols="50"></textarea><br>
+                        
+                                <label class="form-label" for="price">Price:</label>
+                                <input class="form-control" type="number"  name="price" required><br>
+
+                                <label class="form-label" for="offerprice">Offer Price:</label>
+                                <input class="form-control" type="number"  name="offerprice" required><br>
+                        
+                                <label class="form-label" for="quantity">Quantity:</label>
+                                <input class="form-control" type="number"  name="quantity" required><br>
+
+                                <label>
+                                    <input class="" type="checkbox" name="star" value="1">
+                                    Star this Product to show in Main page
+                                </label>
+
+                                <div>
+                                    {% comment %} <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button> {% endcomment %}
+                                    <button type="submit" class="btn btn-md rounded font-sm hover-up">Publish</button>
+                                </div>
+                            </div>
+                                <div class="col-8 ">
+                                    <div class="container">
+                                        <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="col">
+                                            <div class="card card-product-grid">
+                                                <label class="form-label" for="product_images">Product Image 1</label>
+                                                <a class="img-wrap"> <img src="{{product.product_images.url}}" alt="Product"> </a>
+                                                <div class="info-wrap">
+                                                    <a href="#" class="title text-truncate">First cover image</a>
+                                                    <input class="form-control" type="file" name="product_images" value="" accept="image/*" ><br>
+                                                </div>
+                                            </div> <!-- card-product  end// -->
+                                        </div>
+                                        <div class="col">
+                                            <div class="card card-product-grid">
+                                                <label class="form-label" for="product_images">Product Image 3</label>
+                                                <a class="img-wrap"> <img src="{{product.product_images_2.url}}" alt="Product"> </a>
+                                                <div class="info-wrap">
+                                                    <input class="form-control" type="file" name="product_images_2" value="" accept="image/*" ><br>
+                                                </div>
+                                            </div> <!-- card-product  end// -->
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="col">
+                                            <div class="card card-product-grid">
+                                                <label class="form-label" for="product_images">Product Image 2</label>
+                                                <a class="img-wrap"> <img src="{{product.product_images_1.url}}" alt="Product"> </a>
+                                                <div class="info-wrap">
+                                                    <a href="#" class="title text-truncate">Second cover image</a>
+                                                    <input class="form-control" type="file" name="product_images_1" value="" accept="image/*" ><br>
+                                                </div>
+                                            </div> <!-- card-product  end// -->
+                                        </div>
+                                        <div class="col">
+                                            <div class="card card-product-grid">
+                                                <label class="form-label" for="product_images">Product Image 4</label>
+                                                <a class="img-wrap"> <img src="{{product.product_images_3.url}}" alt="Product"> </a>
+                                                <div class="info-wrap">
+                                                    <input class="form-control" type="file" name="product_images_3" value="" accept="image/*" ><br>
+                                                </div>
+                                            </div> <!-- card-product  end// -->
+                                        </div>
+                                    </div> 
+                                </div>
+                                </div>
+                                </div>
+                                </form>
+                        </div>                   
+                    </div> <!-- card end// -->
+                </div>
+                
+            </div>
+        </section> <!-- content-main end// -->
+
+        {% endblock %}

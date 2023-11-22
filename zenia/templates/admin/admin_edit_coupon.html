@@ -1,0 +1,143 @@
+{% extends 'admin/base1.html' %}
+{% block title %}
+Zenia Admin
+{% endblock title %}
+{% load static %}
+{% block 'body' %}
+
+<link rel="stylesheet" href="{% static 'assets1/css/extra.css' %}">
+
+<div aria-live="polite" aria-atomic="true" class="toast-container position-fixed  end-0 p-3 mt-70" id="toastPlacement" style="z-index: 1000;">
+    {% for message in messages %}
+      <div class="toast align-items-center text-white bg-{{ message.tags }} border-0 pe-3" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            {{ message }}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Coupons</h2>
+                </div>
+                <div>
+                    <a href="{% url "admin_coupons" %}"  class="btn btn-primary btn-sm rounded"><< Back</a>
+                </div>
+            </div>
+            <div class="card mb-4">
+                <header class="card-header">
+                    
+                </header> <!-- card-header end// -->
+                <div class="card-body">
+                    <div class="row gx-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-2 row-cols-xxl-5">
+                        <form method="POST" action="{% url 'admin_update_coupon' id=coupon.id %}">
+                            {% csrf_token %}
+                            <div class="mb-2">
+                                <label for="coupon_code">Coupon Code:</label>
+                                <input type="text" id="coupon_code" name="coupon_code"  value="{{coupon.code}}" placeholder="Coupon Code" class="form-control" required />
+                            </div>
+                            <div class="mb-3">
+                                <select id="discount-type" name="discount_type" class="form-select">
+                                    <option value="" disabled selected>Select Discount Type</option>
+                                    {% for coupon_choice in COUPON_CHOICES %}
+                                    <option value="{{coupon_choice.0}}">{{coupon_choice.0}}</option>
+                                    {% endfor %}
+                                    
+                                </select>
+                            </div>
+                           
+                            <div class="mb-2">
+                                <label for="discount">Discount:</label>
+                                <input type="number" name="discount"  placeholder="Discount" value="{{coupon.discount}}" class="form-control" required>
+                            </div>
+                            {% comment %} <div>
+                                <label for="expiration-date">Expiration Date:</label>
+                                <input  class="form-control" type="date" id="expiration-date" name="expiry_date" required>
+                            </div> {% endcomment %}
+                            {% load tz %}
+                            <div>
+                                <label for="expiration-date2">Expiration Date:</label>
+                                <input class="form-control" type="text" id="expiration-date2" value="{{coupon.expiration_date}}" name="expiry_date" placeholder="dd/mm/yyyy" required>
+                                <small id="dateHelp" class="form-text text-muted">Enter the date in the format dd/mm/yyyy.</small>
+                            </div>
+                            
+                            <div>
+                                <label for="max-uses">Maximum Uses:</label>
+                                <input class="form-control" type="number" id="max-uses" value="{{coupon.max_uses}}" name="max_uses" required>
+                            </div>
+                            <div>
+                                <label for="min-purchase-amount">Minimum Purchase Amount:</label>
+                                <input  class="form-control" type="number" id="min-purchase-amount" value="{{coupon.min_price}}" name="min_price" step="0.01">
+                            </div>
+                            <div class="my-2">
+                                <label for="description">Description:</label>
+                                <textarea name="description"  placeholder="Coupon Description" value="{{coupon.description}}" class="form-control" required></textarea>
+                            </div>
+                            <div class="m-3">
+                                <button type="submit" class="btn btn-sm rounded btn-primary">UPDATE</button>
+                            </div>
+                        </form>
+        </div> <!-- col.// -->
+            </div> <!-- row.// -->
+                </div> <!-- card-body end// -->
+                    </div> <!-- card end// -->
+            {% comment %} <div class="pagination-area mt-30 mb-50">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-start">
+                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                        <li class="page-item"><a class="page-link" href="#">02</a></li>
+                        <li class="page-item"><a class="page-link" href="#">03</a></li>
+                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                        <li class="page-item"><a class="page-link" href="#">16</a></li>
+                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                    </ul>
+                </nav>
+            </div> {% endcomment %}
+        </section> <!-- content-main end// -->
+
+
+
+            {% comment %} coupon edit modal {% endcomment %}
+
+            
+              
+              <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+              <script>
+                $(document).ready(function() {
+                    $('#expiration-date2').on('blur', function() {
+                        var enteredDate = $(this).val();
+                        if (enteredDate) {
+                            // Use a regular expression to validate the date format
+                            var dateRegex = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/;
+                            if (!dateRegex.test(enteredDate)) {
+                                alert('Invalid date format. Please enter the date in the format dd/mm/yyyy.');
+                                $(this).val('');
+                            }
+                        }
+                    });
+                });
+            </script>
+
+        <script>
+            // Get the input element by its id
+            const couponCodeInput = document.getElementById('coupon_code2');
+        
+            // Add an event listener for input changes
+            couponCodeInput.addEventListener('input', function() {
+                // Get the current input value and convert it to uppercase
+                const inputValue = this.value.toUpperCase();
+        
+                // Update the input field value with the uppercase value
+                this.value = inputValue;
+            });
+        </script>
+        
+
+        {% endblock %}
+
+
