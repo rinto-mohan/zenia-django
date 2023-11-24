@@ -188,27 +188,27 @@ class Coupon(models.Model):
         redeemed_details = UserCoupons.objects.filter(coupon=self, user=user, is_used=True)
         return redeemed_details.exists()
     
-default_expiration_date = date(9999, 12, 31)
+# default_expiration_date = date(9999, 12, 31)
     
-default_coupon, created = Coupon.objects.get_or_create(
-    code="DEFAULT_COUPON",
-    defaults={
-        "discount": 0,
-        "is_active": True,
-        "expiration_date": default_expiration_date,
-        "min_price": 0,
-        "max_uses": 1,
-        "description": "No coupon applied",
-        "coupon_type": "percentage",
-    }
-)
-if not created:
-    default_coupon.expiration_date = default_expiration_date
-    default_coupon.save()
+# default_coupon, created = Coupon.objects.get_or_create(
+#     code="DEFAULT_COUPON",
+#     defaults={
+#         "discount": 0,
+#         "is_active": True,
+#         "expiration_date": default_expiration_date,
+#         "min_price": 0,
+#         "max_uses": 1,
+#         "description": "No coupon applied",
+#         "coupon_type": "percentage",
+#     }
+# )
+# if not created:
+#     default_coupon.expiration_date = default_expiration_date
+#     default_coupon.save()
 
-def get_default_coupon():
-    coupon = Coupon.objects.get(code="DEFAULT_COUPON")
-    return coupon.id
+# def get_default_coupon():
+#     coupon = Coupon.objects.get(code="DEFAULT_COUPON")
+#     return coupon.id
 
 class UserCoupons(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
