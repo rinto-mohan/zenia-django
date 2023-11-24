@@ -10152,13 +10152,13 @@ footer a {
   z-index: 4;
 }
 
-/* .block-banner-shop {
+.block-banner-shop {
   padding: 177px 0px;
   background-image: url(../imgs/banner/shop-banner.jpg);
   background-position: left top;
   background-repeat: no-repeat;
   background-size: cover;
-} */
+}
 
 .breadcrumbs {
   margin-top: 8px;
