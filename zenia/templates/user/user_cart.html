@@ -83,10 +83,7 @@ Zenia
               <div class="item-cart-info">
                 <div class="item-cart-info-1"><a class="text-16-medium" href="{% url 'user_product_detail' id=cartitem.product.id %}">{{ cartitem.product.product_name}}</a>
                   <p class="body-p my-2">₹{{cartitem.product.price}}</p>
-                  {% comment %} <div class="box-info-size-color-product">
-                    <p class="box-color"><span class="body-p2 neutral-medium-dark">Color:</span><span class="body-p2 neutral-dark">Navy</span></p>
-                    <p class="box-size"><span class="body-p2 neutral-medium-dark">Size:</span><span class="body-p2 neutral-dark">S</span></p>
-                  </div> {% endcomment %} 
+                  
                   <div class="box-form-cart">
                     <div class="form-cart detail-qty">
                         <a href="#" class="minus" data-action="decrement" data-product-id="{{ cartitem.product.id }}" data-product-price="{{ cartitem.product.price }}"></a>
@@ -111,113 +108,7 @@ Zenia
           </div>
           
           
-          {% comment %} <div class="box-may-also-like">
-            <h4 class="box-border-bottom mb-20">You May Also Like</h4>
-            <div class="list-items-also-like">
-              <div class="item-also-like">
-                <div class="item-also-like-image"><img src="assets/imgs/page/cart/sp3.png" alt="Guza"></div>
-                <div class="item-also-like-info">
-                  <div class="item-also-like-info-1"><a class="text-16-medium" href="#">Ball Crew Shirt</a>
-                    <p class="body-2 neutral-medium-dark mb-8">$35.00</p>
-                    <div class="box-color box-size mb-8"><span class="body-p2 neutral-medium-dark">Color:</span>
-                      <div class="dropdown">
-                        <button class="btn dropdown-toggle" id="dropdownColor" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span>Black</span></button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownColor">
-                          <li><a class="dropdown-item" href="#">Black</a></li>
-                          <li><a class="dropdown-item" href="#">Navy</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                    <div class="box-size mb-8"><span class="body-p2 neutral-medium-dark">Size:</span>
-                      <div class="dropdown">
-                        <button class="btn dropdown-toggle" id="dropdownSize" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span>M</span></button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownSize">
-                          <li><a class="dropdown-item" href="#">S</a></li>
-                          <li><a class="dropdown-item" href="#">M</a></li>
-                          <li><a class="dropdown-item" href="#">XL</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="item-also-like-info-2">
-                    <div class="box-form-cart">
-                      <div class="form-cart detail-qty"><span class="minus"></span>
-                        <input class="qty-val form-control" type="text" name="quantity" value="1" min="1"><span class="plus"></span>
-                      </div><a class="btn btn-black-medium" href="#">Add to Cart</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item-also-like">
-                <div class="item-also-like-image"><img src="assets/imgs/page/cart/sp4.png" alt="Guza"></div>
-                <div class="item-also-like-info">
-                  <div class="item-also-like-info-1"><a class="text-16-medium" href="#">Ball Crew Shirt</a>
-                    <p class="body-2 neutral-medium-dark mb-8">$35.00</p>
-                    <div class="box-color box-size mb-8"><span class="body-p2 neutral-medium-dark">Color:</span>
-                      <div class="dropdown">
-                        <button class="btn dropdown-toggle" id="dropdownColor" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span>Black</span></button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownColor">
-                          <li><a class="dropdown-item" href="#">Black</a></li>
-                          <li><a class="dropdown-item" href="#">Navy</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                    <div class="box-size mb-8"><span class="body-p2 neutral-medium-dark">Size:</span>
-                      <div class="dropdown">
-                        <button class="btn dropdown-toggle" id="dropdownSize" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span>M</span></button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownSize">
-                          <li><a class="dropdown-item" href="#">S</a></li>
-                          <li><a class="dropdown-item" href="#">M</a></li>
-                          <li><a class="dropdown-item" href="#">XL</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="item-also-like-info-2">
-                    <div class="box-form-cart">
-                      <div class="form-cart detail-qty"><span class="minus"></span>
-                        <input class="qty-val form-control" type="text" name="quantity" value="1" min="1"><span class="plus"></span>
-                      </div><a class="btn btn-black-medium" href="#">Add to Cart</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item-also-like">
-                <div class="item-also-like-image"><img src="assets/imgs/page/cart/sp5.png" alt="Guza"></div>
-                <div class="item-also-like-info">
-                  <div class="item-also-like-info-1"><a class="text-16-medium" href="#">Ball Crew Shirt</a>
-                    <p class="body-2 neutral-medium-dark mb-8">$35.00</p>
-                    <div class="box-color box-size mb-8"><span class="body-p2 neutral-medium-dark">Color:</span>
-                      <div class="dropdown">
-                        <button class="btn dropdown-toggle" id="dropdownColor" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span>Black</span></button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownColor">
-                          <li><a class="dropdown-item" href="#">Black</a></li>
-                          <li><a class="dropdown-item" href="#">Navy</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                    <div class="box-size mb-8"><span class="body-p2 neutral-medium-dark">Size:</span>
-                      <div class="dropdown">
-                        <button class="btn dropdown-toggle" id="dropdownSize" type="button" data-bs-toggle="dropdown" aria-expanded="false"><span>M</span></button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownSize">
-                          <li><a class="dropdown-item" href="#">S</a></li>
-                          <li><a class="dropdown-item" href="#">M</a></li>
-                          <li><a class="dropdown-item" href="#">XL</a></li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="item-also-like-info-2">
-                    <div class="box-form-cart">
-                      <div class="form-cart detail-qty"><span class="minus"></span>
-                        <input class="qty-val form-control" type="text" name="quantity" value="1" min="1"><span class="plus"></span>
-                      </div><a class="btn btn-black-medium" href="#">Add to Cart</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> {% endcomment %}
+          
         </div>
         <div class="col-lg-5">
           <div class="box-detail-cart">
@@ -240,14 +131,8 @@ Zenia
                   </div>
                   <div class="item-radio">
                     <label>
-                      {% comment %} <input type="radio" name="shipping" checked="checked" hidden>Coupon discount {% endcomment %}
-                    {% comment %} </label><span class="price-ship text-success">-&#8377;{{discount}}</span> {% endcomment %}
                   </div>
-                  {% comment %} <div class="item-radio">
-                    <label>
-                      <input type="radio" name="shipping">Local pickup: $60.00
-                    </label>
-                  </div> {% endcomment %}
+                  
                 </div>
                 <p class="body-p2 neutral-medium-dark mb-12">No GST or other Gov tax are added.</p>
               <form action="/user_checkout" method="post">
@@ -264,7 +149,6 @@ Zenia
                 <div class="coupon-">
                   <input class="form-control input-" id="coupon_code" name="coupon" type="text" value="{{coupon.code}}" placeholder="Have a coupon ?" >
                 </div>
-                {% comment %} <div class="coupon-right"><a class="btn btn-border" href="#">Update Cart</a></div> {% endcomment %}
               </div>
               {% endif %}
             </div>
@@ -289,19 +173,7 @@ Zenia
   </section>
   
   {% endif %}
-  {% comment %} {% for order in pending_order %}
-  <div class="card">
-    <div class="card-header">
-      You are just one step away to complete your order !
-    </div>
-    <div class="card-body">
-      <h5 class="card-title"> &#8377;{{order.order_total}} </h5>
-      <p class="card-text">Pay now using</p>
-      <a href="{% url "user_order_confirm" id=order.id %}" class="btn btn-black">Razorpay</a>
-      <a href="{% url "user_payment" id=order.id %}" class="btn btn-black">COD</a>
-    </div>
-  </div>
-  {% endfor %} {% endcomment %}
+  
 
   </main>
 

@@ -175,7 +175,6 @@ class Coupon(models.Model):
     discount = models.DecimalField(blank=True, max_digits=10, decimal_places=2)
     expiration_date = models.DateField()
     is_active = models.BooleanField(default=True)
-    # applied = models.BooleanField(default=False,blank=True)
     min_price = models.DecimalField(max_digits=10, decimal_places=2)
     max_uses = models.IntegerField( blank=True, default=1 )
     description = models.TextField(max_length=500, blank=True)
@@ -188,8 +187,6 @@ class Coupon(models.Model):
     def is_used_by_user(self, user):
         redeemed_details = UserCoupons.objects.filter(coupon=self, user=user, is_used=True)
         return redeemed_details.exists()
-
-
     
 default_expiration_date = date(9999, 12, 31)
     
@@ -227,7 +224,7 @@ class Cart(models.Model):
     user = models.ForeignKey(User, on_delete =models.CASCADE,default=None)
     total = models.DecimalField(max_digits=10, decimal_places=2,default=0)
     grand_total = models.DecimalField(max_digits=10, decimal_places=2,default=0)
-    coupon = models.ForeignKey(Coupon, on_delete =models.CASCADE,blank=True,default=get_default_coupon)
+    coupon = models.ForeignKey(Coupon, on_delete =models.CASCADE,blank=True,default=0, null=True)
 
 
     def __str__(self):
@@ -268,8 +265,7 @@ class Variation(models.Model):
 
     def __unicode__(self):
         return self.product
-    
-
+ 
 
 class Payment(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
@@ -294,10 +290,8 @@ class Order(models.Model):
     )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    coupon = models.ForeignKey(
-               Coupon,
-               on_delete=models.CASCADE, 
-               default=get_default_coupon
+    coupon = models.ForeignKey(Coupon, on_delete=models.CASCADE, 
+               default=0, null=True
                 )
     order_number = models.CharField(max_length=100, unique=True)
     order_date = models.DateTimeField(auto_now_add=True)

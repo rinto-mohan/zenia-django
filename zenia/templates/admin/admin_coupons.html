@@ -23,27 +23,13 @@ Zenia Admin
             <div class="content-header">
                 <div>
                     <h2 class="content-title card-title">Coupons</h2>
-                    <p>Lorem ipsum dolor sit amet.</p>
                 </div>
                 <div>
                     <a type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-primary btn-sm rounded">Create new</a>
                 </div>
             </div>
             <div class="card mb-4">
-                <header class="card-header">
-                    <div class="row gx-3">
-                        <div class="col-lg-4 col-md-6 me-auto">
-                            <input type="text" placeholder="Search..." class="form-control">
-                        </div>
-                        <div class="col-lg-2 col-6 col-md-3">
-                            <select class="form-select">
-                                <option>Latest added</option>
-                                <option>Cheap first</option>
-                                <option>Most viewed</option>
-                            </select>
-                        </div>
-                    </div>
-                </header> <!-- card-header end// -->
+                
                 <div class="card-body">
                     <div class="row gx-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-2 row-cols-xxl-5">
                         {% for coupon in coupons  %}
@@ -80,18 +66,6 @@ Zenia Admin
             </div> <!-- row.// -->
                 </div> <!-- card-body end// -->
                     </div> <!-- card end// -->
-            {% comment %} <div class="pagination-area mt-30 mb-50">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-start">
-                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                        <li class="page-item"><a class="page-link" href="#">02</a></li>
-                        <li class="page-item"><a class="page-link" href="#">03</a></li>
-                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                        <li class="page-item"><a class="page-link" href="#">16</a></li>
-                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
-                    </ul>
-                </nav>
-            </div> {% endcomment %}
         </section> <!-- content-main end// -->
 
 

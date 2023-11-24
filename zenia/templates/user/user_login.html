@@ -45,7 +45,7 @@ Zenia
                         {% endif %}
                       </div>
                       <div class="form-group">
-                        <a class="link-under buttun-forgotpass" href="{% url "user_recover_password" %}">Forgot your password?</a>
+                        <a class=" me-3 -medium-dark" href="{% url "user_recover_password" %}">Forgot your password?</a>
                       </div>
                       <div class="form-group">
                         <button type="submit" class="btn btn-black d-block">Login</button>
@@ -53,23 +53,7 @@ Zenia
                     </div>
                     </form>
                     
-                    <form action="{% url 'user_forgot_password' %}" method="post">
-                        {% csrf_token %}
-                      <div class="form-password-info">
-                        <h5>Recover password</h5>
-                        <div class="form-login">
-                          <div class="form-group">
-                            <input class="form-control" type="text" name="email" placeholder="Enter your email">
-                          </div>
-                          <div class="form-group">
-                            <button type="submit" class="btn btn-black d-block">Recover</button>
-                          </div>
-                          <div class="text-center">
-                            <p class="body-p2 neutral-medium-dark">Already have an account?<a class="neutral-dark login-now" href="#">Login Now</a></p>
-                          </div>
-                        </div>
-                      </div>
-                    </form>
+                    
                 </div>
             </div>
         </div>

@@ -12,7 +12,6 @@ urlpatterns = [
 
     # Forgot Password
     path('user_forgot_password/',views.user_forgot_password,name='user_forgot_password'),
-    path('user_change_password',views.user_change_password,name='user_change_password'),
     path('user_change_password_profile',views.user_change_password_profile,name='user_change_password_profile'),
     path('user_reset_password_validate/<uidb64>/<token>/',views.user_reset_password_validate,name='user_reset_password_validate'),
     path('user_reset_password/',views.user_reset_password,name='user_reset_password'),
@@ -22,7 +21,6 @@ urlpatterns = [
     path('user_shop/',views.user_shop,name='user_shop'),
     path('user_shop/<int:category_id>/',views.user_shop,name='user_shop'),
     path('user_product_detail/<int:id>/',views.user_product_detail,name='user_product_detail'),
-    path('update_quantity/<str:product_id>/<str:new_quantity>/',views.update_quantity,name='update_quantity'),
     
 
     # Profile
@@ -39,13 +37,10 @@ urlpatterns = [
     path('user_cart',views.user_cart,name='user_cart'),
     path('user_add_to_cart/<int:id>/',views.user_add_to_cart,name='user_add_to_cart'),
     path('user_remove_cartitem/<int:id>/',views.user_remove_cartitem,name='user_remove_cartitem'),
-    path('add_quantity/<int:id>/',views.add_quantity,name='add_quantity'),
-    path('delete_quantity/<int:id>/',views.delete_quantity,name='delete_quantity'),
     path('update_cart_quantity/',views.update_cart_quantity,name='update_cart_quantity'),
 
     # Checkout
     path('user_checkout',views.user_checkout,name='user_checkout'),
-    path('user_coupon',views.user_coupon,name='user_coupon'),
     path('previous_page',views.previous_page,name='previous_page'),
 
     # Order
@@ -57,14 +52,11 @@ urlpatterns = [
 
     # Payment
     path('user_payment/<int:id>/',views.user_payment,name='user_payment'),
-    path('download_invoice/<int:order_id>/', views.generate_invoice_pdf, name='generate_invoice_pdf'),
 
     # Wishlist
     path('user_add_wishlist/<int:id>/',views.user_add_wishlist,name='user_add_wishlist'),
 
     # Helper PATHS
-    path('user_add_save_later/<int:cartitem_id>/',views.user_add_save_later,name='user_add_save_later'),
     path('search/', views.search, name='search'),
-    path('test_smtp/', views.test_smtp_connection, name='test_smtp'),
 
 ]

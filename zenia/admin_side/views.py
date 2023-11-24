@@ -1,5 +1,4 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from django.contrib.auth import authenticate,login,logout
 from django.contrib import auth
 from django.contrib import messages
 from django.views.decorators.cache import cache_control
@@ -7,23 +6,18 @@ from django.contrib.auth.models import User
 from user_side.models import *
 from django.contrib.auth.decorators import login_required
 from django.db.utils import IntegrityError
-from django.utils.text import slugify
 from django.http import Http404
 from django.core.exceptions import ValidationError
-from django.core.validators import validate_integer
-from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime,timedelta
 from django.utils import timezone 
 from django.http import JsonResponse
-import json
 from django.db.models import Sum,Count
-from django.template.loader import get_template
 from django.db.models.functions import TruncMonth
 from django.db.models import F
 from django.db.models import FloatField
-from decimal import Decimal,InvalidOperation  
+from decimal import Decimal
 
 
 
@@ -262,8 +256,7 @@ def admin_categories(request):
         }
 
     return render(request,'admin/admin-categories.html',context)  
-    
-      
+
 
 @login_required(login_url='admin_login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -683,26 +676,6 @@ def admin_delete_order(request,id):
 @login_required(login_url='admin_login')
 def admin_edit_order(request,id):
     return render(request,'admin/admin-orders-detail.html')
-
-@login_required(login_url='admin_login')
-@cache_control(no_cache=True,must_revalidate=True,no_store=True)
-def admin_review(request):
-    reviews = ReviewRating.objects.all()
-    paginator = Paginator(reviews,6)
-    page = request.GET.get('page')
-    paged_reviews = paginator.get_page(page)
-    reviews_count = reviews.count()
-    context={
-        'reviews':reviews,
-        'reviews':paged_reviews,
-        'reviews_count':reviews_count,
-        }
-
-    return render(request, 'admin/admin_review.html',context)
-
-@login_required(login_url='admin_login')
-@cache_control(no_cache=True,must_revalidate=True,no_store=True)
-def admin_review_replay(request, id):
     review = get_object_or_404(ReviewRating, id=id)
 
     if request.method == 'POST':
@@ -759,55 +732,10 @@ def sales_report(request):
     print('sales',sales_data)
     return JsonResponse(sales_data, safe=False)
 
-@login_required(login_url='admin_login')
-@cache_control(no_cache=True,must_revalidate=True,no_store=True)
-def admin_contact(request):
-    contact_us = ContactUs.objects.all()
-  
-    context = {
-        'contact_us': contact_us, 
-        }
-    return render(request, 'admin/admin_contact.html', context)
-
-@login_required(login_url='admin_login')
-def admin_panel(request):     
-    return render(request,'admin/admin-login.html')
-
-@login_required(login_url='admin_login')
-def admin_brands(request):     
-    return render(request,'admin/admin-brands.html')
-
-@login_required(login_url='admin_login')
-def admin_account_register(request):
-    return render(request,'admin/admin-account-register.html')
-
-@login_required(login_url='admin_login')
-def admin_user_card(request):
-    return render(request,'admin/admin-user-cards.html')
-
-@login_required(login_url='admin_login')
-def admin_account_login(request):
-    return render(request,'admin/admin-account-login.html')
-
-@login_required(login_url='admin_login')
-def admin_settings(request):
-    return render(request,'admin/admin-settings.html')
-
-@login_required(login_url='admin_login')
-def admin_blank(request):
-    return render(request,'admin/admin-blank.html')
 
 @login_required(login_url='admin_login')
 def admin_reviews(request):
     return render(request,'admin/admin-reviews.html')
-
-@login_required(login_url='admin_login')
-def admin_error_404(request):
-    return render(request,'admin/admin-error-404.html')
-
-@login_required(login_url='admin_login')
-def admin_form_product(request):
-    return render(request,'admin/admin-form-product.html')
 
 @login_required(login_url='admin_login')
 def admin_orders(request):

@@ -1,7 +1,6 @@
 from django.shortcuts import render,redirect, get_object_or_404
-from django.http import HttpResponse
 from user_side.models import *
-from django.contrib import messages,auth
+from django.contrib import messages
 from .forms import *
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.decorators import login_required
@@ -15,41 +14,20 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage
 from django.views.decorators.cache import cache_control
 from django.core.paginator import Paginator
-from django.core.files import File
-from django.http import JsonResponse, HttpResponse,HttpResponseRedirect
+from django.http import JsonResponse
 
 import uuid
 from django.utils import timezone
 import razorpay
 from django.conf import settings
 from decimal import Decimal
-import smtplib
-from django.core.serializers.json import DjangoJSONEncoder
-import base64
 import uuid
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
-
-
-
-
-
-#for otp validation
-import pyotp
-import phonenumbers
 from datetime import datetime, timedelta
-from twilio.rest import Client
-from phonenumbers import parse, PhoneNumberFormat
-from django.urls import reverse
-from PIL import Image
-
-# for invoice download
-from xhtml2pdf import pisa
-from django.template.loader import get_template
 
 
 # -------------------------------------------HELPER FUNCTIONS-----------------------------------------------
-
 
 
 def previous_page(request):
@@ -77,9 +55,7 @@ def create_order_number():
     
     return order_number
 
-
 #----------------------------------------- USER LOGIN AND LOGOUT--------------------------------------------------------------
-
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def index(request):
@@ -120,7 +96,7 @@ def index(request):
         'lform':lform,
         'sform':sform,
         }
-        
+
     return render(request,'user/index.html',context)
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -275,6 +251,9 @@ def user_logout(request):
 def user_forgot_password(request):
     if request.method=='POST':
         email = request.POST['email']
+        if email.isspace:
+            message.error(request,'Enter valid email address')
+            return redirect(user_recover_password)
         if User.objects.filter(email=email).exists():
             user =User.objects.get(email__exact=email)
 
@@ -359,35 +338,6 @@ def user_reset_password(request):
         }
         return render(request,'user/user_forgot_password.html',context)
 
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
-def user_change_password(request):
-    if request.method == 'POST':
-        form = ChangePasswordForm(request.POST)
-        if form.is_valid():
-            password = form.cleaned_data.get('password')
-            confirm_password = form.cleaned_data.get('confirm_password')
-            try:
-                email = request.session.get('user_email')
-            except:
-                messages.error(request, 'Request Timeout')
-                return redirect('user_forgot_password')
-            user = get_object_or_404(User, email=email)
-            user.set_password(password)
-            user.save()
-            del request.session['user_email']
-            messages.success(request, 'Password changed successfully, Login to your account')
-            return redirect('user_login')
-        else:
-            messages.error(request, 'Invalid Form Submission')
-
-    form = ChangePasswordForm()
-    
-    context = {
-        'form': form,
-    }
-
-    return render(request, 'user/user_change_password.html',context)
-
 def user_recover_password(request):
 
     return render(request, 'user/user_recover_password.html')
@@ -422,8 +372,6 @@ def user_shop(request,category_id=None):
         }
     return render(request,'user/user-shop.html',context)
 
-
-
 #-----------------------------------------USER PRODUCT DETAILS-------------------------------------------
 
 
@@ -435,22 +383,8 @@ def user_product_detail(request,id):
     }
     return render(request,'user/user-product-detail.html',context)
 
-@require_POST
-@csrf_exempt  # Use csrf_exempt for simplicity; you may want to add CSRF protection
-def update_quantity(request, product_id, new_quantity):
-    try:
-        product = Product.objects.get(id=product_id)
-        new_quantity = int(new_quantity)
-        if new_quantity >= product.quantity:
-            # return JsonResponse({'success': False, 'error': 'Product out of stock'})
-            return JsonResponse({'success': True})
-    except Product.DoesNotExist:
-        return JsonResponse({'success': False, 'error': 'Product not found'})
-
 
 #----------------------------------------------USER CART--------------------------------------------------
-
-
 
 
 def user_cart(request,total=0,quantity=0,cart_items=None):
@@ -614,8 +548,6 @@ def user_remove_cartitem(request,id):
         cart= Cart.objects.get(user=request.user)
         product = get_object_or_404(Product,id=id)
         cart_item = CartItem.objects.get(product=product,cart=cart)
-        # product.quantity += int(cart_item.quantity)
-        # product.save()
         cart_item.delete()
     else:
         cart_session = request.session.get('cart_session', {})
@@ -626,49 +558,6 @@ def user_remove_cartitem(request,id):
 
     return redirect('user_cart')
 
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
-def add_quantity(request,id):
-    product = get_object_or_404(Product, id=id, soft_deleted=False)
-    if request.user.is_authenticated:
-        cart= Cart.objects.get(user=request.user)
-        cart_item = CartItem.objects.get(product=product,cart=cart)
-        if cart_item:
-            cart_item.quantity +=1
-            cart_item.save()
-    else:
-        cart_session = request.session.get('cart_session', {})
-        cart_item = cart_session.get(str(product.id))
-
-        if cart_item:
-            cart_item['quantity'] += 1
-            request.session['cart_session'] = cart_session
-
-    return redirect(request.META.get('HTTP_REFERER', 'user_cart'))
-
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
-def delete_quantity(request,id):
-    product = get_object_or_404(Product, id=id, soft_deleted=False)
-    if request.user.is_authenticated:
-        cart= Cart.objects.get(user=request.user)
-        cart_item = CartItem.objects.get(product=product,cart=cart)
-        if cart_item.quantity > 1:
-            cart_item.quantity -=1
-            cart_item.save()
-        else:
-            cart_item = CartItem.objects.get(product=product,cart=cart)
-            cart_item.delete()
-    else:
-        cart_session = request.session.get('cart_session', {})
-        cart_item = cart_session.get(str(product.id))
-
-        if cart_item and cart_item['quantity'] > 1:
-            cart_item['quantity'] -= 1
-            request.session['cart_session'] = cart_session
-        elif cart_item and cart_item['quantity'] == 1:
-            del cart_session[str(product.id)]
-            request.session['cart_session'] = cart_session
-
-    return redirect(request.META.get('HTTP_REFERER', 'user_cart'))
 
 def update_cart_quantity(request):
     if request.method == 'POST':
@@ -687,40 +576,6 @@ def update_cart_quantity(request):
         return JsonResponse({'message': 'Quantity updated successfully','grand_total':grand_total})
 
     return JsonResponse({'message': 'Invalid request method'}, status=400)
-
-    
-    # messages.error(request,'working')
-    # if request.method == 'POST' and request.is_ajax():
-    #     product_id = request.POST.get('product_id')
-    #     cart= Cart.objects.get(user=request.user)
-    #     cart_item = get_object_or_404(CartItem, product=product_id,cart=cart)
-
-    #     if cart_item.quantity > 1:
-    #         cart_item.quantity -= 1
-    #         cart_item.save()
-
-    #         response_data = {'new_quantity': cart_item.quantity}
-    #         return JsonResponse(response_data)
-    #     else:
-    #         response_data = {'message': 'Minimum quantity reached'}
-    #         return JsonResponse(response_data)
-
-
-@cache_control(no_cache=True, must_revalidate=True, no_store=True)
-def user_add_save_later(request,cartitem_id):
-    if request.user.is_authenticated:
-        cartitem = get_object_or_404(CartItem, id=cartitem_id)
-        if cartitem.is_active:
-            cartitem.is_active = False
-        else:
-            cartitem.is_active = True
-        cartitem.save()
-    
-    return redirect('user_cart')
-
-
-
-
 
 
 def user_default_address(request,id):
@@ -1225,40 +1080,7 @@ def user_order_details(request,id):
             }
     return render(request, 'user/user_order_details.html',context)
 
-
-def generate_invoice_pdf(request, order_id):
-    template = get_template('user/invoice_template.html')  # Replace with your actual template file
-    order = get_object_or_404(Order, id=order_id)
-    order_items = OrderItem.objects.filter(order=order)
-    address = order.shipping_address
-
-    context={
-            'order':order,
-            'order_items':order_items,
-            'payment':order.payment,
-            'address':address,
-            }
-    html = template.render(context)
-
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="invoice_{order_id}.pdf'
-
-    # Create a PDF object, and write the HTML content to it using pisa
-    pisa_status = pisa.CreatePDF(html, dest=response)
-    if pisa_status.err:
-        return HttpResponse('We had some errors with code %s <pre>%s</pre>' % (pisa_status.err, pisa_status.err_text))
-
-    return response
-
-
-# ----------------------------------------------COUPONS-----------------------------------------------------------
-
-
-def user_coupon(request):
-    return redirect('user_cart')
-
 #--------------------------------------------USER CHECKOUT-------------------------------------------------
-
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url='user_login')
@@ -1350,7 +1172,6 @@ def user_checkout(request):
         return render(request,'user/user_checkout.html',context)
     else:
         return redirect('user_cart')
-
    
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def search(request):
@@ -1368,6 +1189,7 @@ def search(request):
 
     return render(request, 'user/user-shop.html', context)
 
+
 def user_add_wishlist(request,id):
     product = get_object_or_404(Product, id=id)
     wishlist = Wishlist(
@@ -1377,19 +1199,3 @@ def user_add_wishlist(request,id):
     wishlist.save()
     wishlist = Wishlist.objects.all().filter(user=request.user)
     return render(request, 'user/user_wishlist.html',{'wishlist':wishlist} )
-
-def test_smtp_connection(request):
-    # SMTP server settings
-    host = 'smtp.gmail.com'
-    port = 587  # Example port, change it to your SMTP server's port
-    user = 'rintomona5@gmail.com'
-    password = 'gqwl vlvv occv xrns'
-
-    try:
-        server = smtplib.SMTP(host, port)
-        server.starttls()
-        server.login(user, password)
-        server.quit()
-        return HttpResponse("SMTP connection successful")
-    except Exception as e:
-        return HttpResponse(f"SMTP connection failed: {e}")
