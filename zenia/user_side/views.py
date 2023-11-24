@@ -120,7 +120,7 @@ def index(request):
         'lform':lform,
         'sform':sform,
         }
-    
+        
     return render(request,'user/index.html',context)
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)

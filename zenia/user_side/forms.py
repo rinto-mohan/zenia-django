@@ -1,10 +1,6 @@
 from django import forms
-from django.core.exceptions import ValidationError
-from django.contrib.auth import validators
-from .models import User,ReviewRating,Wallet
+from .models import User
 import re
-import phonenumbers
-from phonenumbers import is_valid_number
 
 class SignupForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput(attrs={
