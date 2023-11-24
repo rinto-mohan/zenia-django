@@ -167,6 +167,10 @@ class Address(models.Model):
         return self.address_1
     
 class Coupon(models.Model):
+    COUPON_CHOICES = (
+        ("percentage", "percentage"),
+        ("fixed", "fixed"),
+    )
     code = models.CharField(max_length=50, unique=True)
     discount = models.DecimalField(blank=True, max_digits=10, decimal_places=2)
     expiration_date = models.DateField()
@@ -175,10 +179,6 @@ class Coupon(models.Model):
     min_price = models.DecimalField(max_digits=10, decimal_places=2)
     max_uses = models.IntegerField( blank=True, default=1 )
     description = models.TextField(max_length=500, blank=True)
-    COUPON_CHOICES = (
-        ("percentage", "percentage"),
-        ("fixed", "fixed"),
-    )
     coupon_type = models.CharField(max_length=50, choices=COUPON_CHOICES, default=("percentage", "percentage"))
 
 
