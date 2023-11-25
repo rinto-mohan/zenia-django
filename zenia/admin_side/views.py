@@ -90,6 +90,7 @@ def admin_login(request):
 
     return render(request,'admin/admin-login.html')
 
+
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def admin_logout(request):
     if 'admin_user' in request.session:
@@ -124,6 +125,7 @@ def admin_user_block_unblock(request,id):
     
     return redirect('admin_user_list')
 
+
 @login_required(login_url='admin_login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def admin_user_list(request):
@@ -138,6 +140,7 @@ def admin_user_list(request):
         }
 
     return render(request,'admin/admin-user-list.html',context)
+
 
 @login_required(login_url='admin_login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -172,6 +175,7 @@ def admin_add_categories(request):
 
     return redirect('admin_categories')
 
+
 @login_required(login_url='admin_login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def admin_enable_disable_category(request,id):
@@ -199,6 +203,7 @@ def admin_enable_disable_category(request,id):
             messages.warning(request,'Oops ! Error occurred')
     
     return redirect('admin_categories')
+
 
 @login_required(login_url='admin_login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -242,6 +247,8 @@ def admin_edit_category(request,id):
     
     return render(request, 'admin/admin-edit-category.html',context)
 
+
+
 @login_required(login_url='admin_login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def admin_categories(request):
@@ -258,6 +265,7 @@ def admin_categories(request):
     return render(request,'admin/admin-categories.html',context)  
 
 
+
 @login_required(login_url='admin_login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def admin_products_list(request):
@@ -272,6 +280,7 @@ def admin_products_list(request):
         }
 
     return render(request,'admin/admin-products-list.html',context)
+
 
 @login_required(login_url='admin_login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -296,8 +305,7 @@ def admin_add_product(request):
         product_images_2 = request.FILES.get('product_images_2')
         product_images_3 = request.FILES.get('product_images_3')
 
-        if star == '1':
-            product.star = True
+        
         
         if product_images:
             if not product_images.content_type.startswith('image'):
@@ -356,10 +364,12 @@ def admin_add_product(request):
             messages.error(request, 'Quantity should be a valid number.')
             return redirect(request.META.get('HTTP_REFERER', 'admin_products_list'))       
         
+        
+
         category = Category.objects.get(id=category_id)
         product = Product(
                 product_name=product_name,
-                category_id=category,
+                category_id=category.id,
                 brand=brand,
                 description=description,
                 price=decimal_price,
@@ -370,6 +380,9 @@ def admin_add_product(request):
                 product_images_2 = product_images_2,
                 product_images_3 = product_images_3,
             )
+        
+        if star=='1':
+            product.starred=True
 
         product.save()
         messages.success(request, 'Product added successfully!')
@@ -381,6 +394,7 @@ def admin_add_product(request):
         }
     
     return render(request,'admin/admin-add-product.html',context)
+
 
 @login_required(login_url='admin_login')
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -410,9 +424,10 @@ def admin_edit_product(request, product_id):
         product_images_3 = request.FILES.get('product_images_3')
 
         
-
-        if star == '1':
-            product.star = True
+        
+        if star=='1':
+            product.starred=True
+            product.save()
         
         if product_images:
             if not product_images.content_type.startswith('image'):
@@ -529,6 +544,7 @@ def admin_unlist_list_product(request,product_id):
         messages.error(request,'Error Occurred while updating')
         return redirect('admin_products_list')
 
+
 def admin_coupons(request):
     if request.method == 'POST':
         code = request.POST.get('coupon_code')
@@ -596,6 +612,7 @@ def admin_coupons(request):
 
     return render(request,'admin/admin_coupons.html',context)
 
+
 @login_required(login_url='admin_login')
 def admin_update_coupon(request,id):
     coupon = get_object_or_404(Coupon, id = id)
@@ -662,6 +679,7 @@ def admin_update_coupon(request,id):
 
     return render(request,'admin/admin_edit_coupon.html',context)
 
+
 @login_required(login_url='admin_login')
 def admin_delete_coupon(request,id):
 
@@ -669,9 +687,11 @@ def admin_delete_coupon(request,id):
     coupon.delete()
     return redirect('admin_coupons')
 
+
 @login_required(login_url='admin_login')
 def admin_delete_order(request,id):
     return render(request,'admin/admin-orders-detail.html')
+
 
 @login_required(login_url='admin_login')
 def admin_edit_order(request,id):
@@ -689,8 +709,10 @@ def admin_edit_order(request,id):
         }
     return render(request, 'admin/admin_review_replay.html', context)
 
+
 @login_required(login_url='admin_login')
 def get_weekly_sales(request):
+
     end_date = timezone.now()
     start_date = end_date - timezone.timedelta(days=7)
 
@@ -737,6 +759,7 @@ def sales_report(request):
 def admin_reviews(request):
     return render(request,'admin/admin-reviews.html')
 
+
 @login_required(login_url='admin_login')
 def admin_orders(request):
       
@@ -755,6 +778,7 @@ def admin_orders(request):
         }
     return render(request,'admin/admin-orders.html',context)
 
+
 @login_required(login_url='admin_login')
 def admin_order_details(request,id):
     order = Order.objects.get(id=id)
@@ -768,6 +792,7 @@ def admin_order_details(request,id):
         'payments': payments,
         }
     return render(request,'admin/admin-orders-detail.html',context)
+
 
 @login_required(login_url='admin_login')
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
@@ -815,6 +840,7 @@ def admin_update_order_status(request, order_id, new_status):
     messages.success(request, f"Order #{order.order_number} has been updated to '{new_status}' status.")
     
     return redirect('admin_orders')
+
 
 @login_required(login_url='admin_login')
 def admin_sales_report(request):

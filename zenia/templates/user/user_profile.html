@@ -35,12 +35,12 @@ Zenia
     </div>
     
   
-    <section class="pt-25">
+    <section class="pt-25 p-5">
         <div class="container ">
             <div class="row ">
                 <div class="col-lg-10 m-auto ">
                     <div class="row">
-                        <div class="col-md-4 p-3 " style="border: solid 1px #F1F1F1; border-radius: 10px; background:  #F6F6F6; box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);">
+                        <div class="col-md-4 p-3 mb-4 " style="border: solid 1px #F1F1F1; border-radius: 10px; background:  #F6F6F6; box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);">
                             <div class="author-card pb-4 p-2" style="backgrounde5e5e5;">
                                 <div class="author-card-cover" style="background-image: url(https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRB-IuWJYZEC4oBMR37dqW_OL07eQiMPzfsTg&usqp=CAU);"></div>
                                 <div class="author-card-profile">
@@ -55,7 +55,6 @@ Zenia
                                     <div class="author-card-details">
                                         <h5 class="author-card-name text-lg">{{user.first_name | capfirst}} {{user.last_name}}</h5>
                                         <h6 class="author-card-name text-lg">@{{user.username}} </h6>
-                                        {% comment %} <span class="author-card-position">@{{ user.username}}</span> {% endcomment %}
                                         <p class="author-card-name">Z-wallet : {% if wallet %}₹{{wallet.balance}}{% else %}0.00{% endif %}</p>
                                     </div>
                                 </div>
@@ -92,7 +91,7 @@ Zenia
                         </div>
                         <div class="col-md-8">
                             <div class="tab-content dashboard-content" >
-                                <div class="tab-pane fade active show" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+                                {% comment %} <div class="tab-pane fade active show" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
                                     <div class="card mt-" >
                                        <div class="card-header bg-white " >
                                             
@@ -118,9 +117,10 @@ Zenia
                                               </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
-                                    <div class="card striped" style="width: 700px; height: 600px; overflow: auto;">
+                                </div> {% endcomment %}
+                                
+                                <div class="tab-pane fade " id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                                    <div class="card striped" style="width: 00px; height: 600px; overflow: auto;">
                                             <h5 class="mx-4 mt-3">Your Orders</h5>
                                         
                                         {% if orders %}

@@ -63,7 +63,7 @@ def index(request):
     #     return redirect('/')
     
     products = Product.objects.all().filter(is_available=True)
-    show_products = Product.objects.all().filter(is_available=True, starred = True)
+    show_products = Product.objects.all().filter(is_available=True, starred=True)
     categories = Category.objects.all().filter(soft_deleted = False)
     try:
         cart = Cart.objects.get(user=request.user.id)
@@ -91,7 +91,7 @@ def index(request):
     else:
         context = {
         'products': products,
-         'show_products': show_products,
+        'show_products': show_products,
         'categories':categories,
         'lform':lform,
         'sform':sform,
@@ -445,9 +445,10 @@ def user_cart(request,total=0,quantity=0,cart_items=None):
         total = sum(item['subtotal'] for item in cart_items)
         quantity = sum(int(item['quantity']) for item in cart_items)
         grand_total = total
+        
 
         context = {
-
+            'not_login' : True,
             'grand_total': grand_total,
             'total': total,
             'quantity': quantity,
@@ -496,8 +497,7 @@ def user_add_to_cart(request, id):
     else:
         if request.method == 'POST':
 
-            quantity = request.POST['quantity']
-
+            quantity = request.POST.get('quantity')
             product = Product.objects.get(id=id, soft_deleted=False)
 
             cart_session = request.session.get('cart_session', {})
@@ -723,7 +723,7 @@ def user_add_address(request):
             
             address.is_billing = True 
 
-        invalid_characters = [' ', '*', '#','@','$','(','+','-','!','^','&']
+        invalid_characters = ['*', '#','@','$','(','+','-','!','^','&']
 
         if any(char in name for char in invalid_characters):
             messages.error(request, 'Name cannot contain spaces or symbols.')
@@ -739,6 +739,10 @@ def user_add_address(request):
 
         if city.isspace():
             messages.error(request,'City cannot be empty')
+            return redirect(request.META.get('HTTP_REFERER', 'user_profile'))
+        
+        if pin.isspace():
+            messages.error(request,'Pincode cannot be empty')
             return redirect(request.META.get('HTTP_REFERER', 'user_profile'))
         
         if len(pin) != 6 and not pin.isdigit() or contains_negative_digits(pin):
@@ -1098,16 +1102,17 @@ def user_checkout(request):
             cart.grand_total = grand_total
             cart.save()
             print('code',code)
+            
             cart = get_object_or_404(Cart, user=request.user.id)
             for cartitem in cart_items:
                 if cartitem.quantity > cartitem.product.quantity:
                     messages.error(request,'Product is Out of Stock !')
                     return redirect('user_cart')
-
             if code :
-                try:
+                if Coupon.objects.filter(code=code).exists():
                     coupon = Coupon.objects.get(code=code)
-                except ObjectDoesNotExist:
+                    print('coupon',coupon.discount)
+                else:
                     messages.error(request, 'Invalid Coupon Code')
                     return redirect('user_cart')
                 
@@ -1122,8 +1127,10 @@ def user_checkout(request):
                 if coupon.coupon_type == 'percentage':
                     print(cart.total)
                     print(cart.grand_total)
+                    print(coupon.discount)
                     discount_percentage = Decimal(coupon.discount)
                     discount_price = (cart.total * discount_percentage / 100)
+                    print('discount_price',discount_price)
                     cart.grand_total = cart.total - discount_price
                     cart.save()
                     messages.success(request, f'Yayy you got {coupon.discount}% Off ')

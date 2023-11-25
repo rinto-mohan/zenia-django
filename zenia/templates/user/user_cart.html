@@ -61,6 +61,33 @@ Zenia
     </div>
    
    </div>
+
+   {% elif not_login %}
+
+   <div class="container-fluid mb-5">
+    <div class="row">
+    
+     <div class="col-md-12">
+     
+         <div class="card">
+
+       <div class="card-body cart">
+           <div class="col-sm-12 empty-cart-cls text-center">
+             <img src="https://i.imgur.com/dCdflKN.png" width="130" height="130" class="img-fluid mb-4 mr-3">
+             <h3><strong>Please login to view your Cart</strong></h3>
+             <h4>Add something to make me happy :)</h4>
+             <a href="/user_login" class="btn btn-black px-5 mt-4 mb-5" > Login</a>
+           </div>
+       </div>
+   </div>
+       
+     
+     </div>
+    
+    </div>
+   
+   </div>
+
    {% else %}
    
    <section class="section block-cart">
@@ -72,6 +99,8 @@ Zenia
              <h6></h6>
           </div>
           <div class="list-items-cart">
+  
+              
             {% for cartitem in cart_items %}
             {% if cartitem.is_active %}
               
@@ -105,10 +134,8 @@ Zenia
 
             {% endif %}
             {% endfor %}
-          </div>
-          
-          
-          
+
+         </div>
         </div>
         <div class="col-lg-5">
           <div class="box-detail-cart">
