@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user_side',
     'admin_side',
-    "verify_email.apps.VerifyEmailConfig",
+    
     
 ]
 
@@ -89,8 +89,8 @@ DATABASES = {
         'NAME': config('NAME'),
         'USER':config('USER'),
         'PASSWORD':config('PASSWORD'),
-        'HOST':'localhost',
-        'PORT':'5432'
+        # 'HOST':'localhost',
+        # 'PORT':'5432'
     }
 }
 
@@ -155,7 +155,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-EMAIL_BACKEND = config('EMAIL_BACKEND')
 EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_PORT = config('EMAIL_PORT')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS')
