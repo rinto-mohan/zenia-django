@@ -144,8 +144,8 @@ STATICFILES_DIRS = [
 MEDIA_URL ='media/'
 MEDIA_ROOT = BASE_DIR /'media'
 
-KEY = 'rzp_test_pgmjQmtCzLQYQb'
-SECRET = 'BDOreptJ5p0vFKWqzsnkFQ2V'
+KEY = config('rzp_test_pgmjQmtCzLQYQb')
+SECRET = config('BDOreptJ5p0vFKWqzsnkFQ2V')
 
 
 STATIC_URL = 'static/'
