@@ -40,8 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user_side',
     'admin_side',
-    
-    
 ]
 
 MIDDLEWARE = [
@@ -75,6 +73,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'zenia.wsgi.application'
 AUTH_USER_MODEL = 'user_side.User'
@@ -131,24 +130,20 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT =BASE_DIR /'static'
+STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR/'static'
 STATICFILES_DIRS = [
     'zenia/static'
 ]
 
-MEDIA_URL ='media/'
-MEDIA_ROOT = BASE_DIR /'media'
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR/'media'
 
-KEY = config('rzp_test_pgmjQmtCzLQYQb')
-SECRET = config('BDOreptJ5p0vFKWqzsnkFQ2V')
-
-
-STATIC_URL = 'static/'
+KEY = 'rzp_test_pgmjQmtCzLQYQb'
+SECRET = 'BDOreptJ5p0vFKWqzsnkFQ2V'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -168,4 +163,3 @@ MESSAGE_TAGS = {
 }
 
 DATE_FORMAT = 'd-m-Y'
-USE_TZ = True
