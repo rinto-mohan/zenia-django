@@ -19,6 +19,7 @@ urlpatterns = [
 
     # Shop
     path('user_shop/',views.user_shop,name='user_shop'),
+    path('user_sort/<int:id>/',views.user_sort,name='user_sort'),
     path('user_shop/<int:category_id>/',views.user_shop,name='user_shop'),
     path('user_product_detail/<int:id>/',views.user_product_detail,name='user_product_detail'),
     
@@ -46,7 +47,7 @@ urlpatterns = [
     # Order
     path('user_place_order',views.user_place_order,name='user_place_order'),
     path('user_cancel_order',views.user_cancel_order,name='user_cancel_order'),
-    path('user_cancel_orderr/<int:id>/',views.user_cancel_orderr,name='user_cancel_orderr'),
+    path('user_cancel_orderrr/<int:id>/',views.user_cancel_orderr,name='user_cancel_orderrr'),
     path('user_order_confirm/<int:id>/',views.user_order_confirm,name='user_order_confirm'),
     path('user_order_details/<int:id>/',views.user_order_details,name='user_order_details'),
 
@@ -55,6 +56,8 @@ urlpatterns = [
 
     # Wishlist
     path('user_add_wishlist/<int:id>/',views.user_add_wishlist,name='user_add_wishlist'),
+    path('user_wishlist/',views.user_wishlist,name='user_wishlist'),
+    path('user_remove_wishlist/<int:id>/',views.user_remove_wishlist,name='user_remove_wishlist'),
 
     # Helper PATHS
     path('search/', views.search, name='search'),

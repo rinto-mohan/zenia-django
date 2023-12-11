@@ -20,9 +20,8 @@
     <meta name="keywords" content="index, page">
     <meta name="author" content="">
 
-    <link rel="shortcut icon" href="{% static 'assets/imgs/theme/favicon3.png' %}" type="image/x-icon">
-    <link rel="stylesheet" href="{% static 'assets/css/style2513.css' %}">
-
+    <link rel="shortcut icon" href="{% static 'assets/imgs/theme/favicon-1.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static './assets/css/style2513.css' %}">
     <!-- Template CSS -->
 
 </head>
@@ -61,7 +60,7 @@
                 <div class="burger-icon burger-icon-white"><span class="burger-icon-top"></span><span class="burger-icon-mid"></span><span class="burger-icon-bottom"></span></div>
               </div>
             </div>
-            <div class="header-logo"> <a class="d-flex" href=""><img alt="zenia" src="{% static 'assets/imgs/theme/logoz1.svg' %}"></a></div>
+            <div class="header-logo"> <a class="d-flex col-md-12 col-6" href=""><img alt="zenia" src="{% static 'assets/imgs/theme/logo3.png' %}" width="100%"></a></div>
             <div class="header-account">
               
 
@@ -96,6 +95,18 @@
                   </a>
 
                 {% endif %}
+
+                <a class="account-icon wishlist" href="/user_wishlist">
+                  <svg class="d-inline-flex align-items-center justify-content-center" width="28" height="28" viewbox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_116_452)">
+                      <path d="M14.001 6.52898C16.35 4.41998 19.98 4.48998 22.243 6.75698C24.505 9.02498 24.583 12.637 22.479 14.993L13.999 23.485L5.52101 14.993C3.41701 12.637 3.49601 9.01898 5.75701 6.75698C8.02201 4.49298 11.645 4.41698 14.001 6.52898ZM20.827 8.16998C19.327 6.66798 16.907 6.60698 15.337 8.01698L14.002 9.21498L12.666 8.01798C11.091 6.60598 8.67601 6.66798 7.17201 8.17198C5.68201 9.66198 5.60701 12.047 6.98001 13.623L14 20.654L21.02 13.624C22.394 12.047 22.319 9.66498 20.827 8.16998Z"></path>
+                    </g>
+                    <defs>
+                      <clippath id="clip0_116_452">
+                        <rect width="24" height="24" fill="white" transform="translate(2 2)"></rect>
+                      </clippath>
+                    </defs>
+                  </svg></a>
  
                 <a class="account-icon cart" href="#" ><span class="number-tag">{{quantity}}</span>
                 <svg width="28" height="28" viewbox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
@@ -107,7 +118,9 @@
                       <rect width="24" height="24" transform="translate(2 2)"></rect>
                     </clippath>
                   </defs>
-                </svg></a>
+                </svg>
+                </a>
+                
               </div>
           </div>
         </div>
@@ -177,7 +190,7 @@
   <div class="footer-1">
     <div class="container">
       <div class="row">
-        <div class="col-lg-6 col-md-12 text-center text-lg-start"><a class="logo-footer" href="#"><img alt="zenia" src="{% static 'assets/imgs/theme/logoz1.svg' %}"></a>
+        <div class="col-lg-6 col-md-12 text-center text-lg-start"><a class="logo-footer" href="#"><img alt="zenia" src="{% static 'assets/imgs/theme/logo1.png' %}" width="100"></a>
           <ul class="menu-footer-inline">
             <li><a href="about-us-1.html">About us</a></li>
             {% comment %} <li><a href="carrers.html">Careers</a></li>
@@ -305,47 +318,7 @@
     </form>
     </div>
   </div>
-  <div class="box-popup-wishlist">
-    <div class="box-wishlist-overlay"></div>
-    <div class="box-wishlist-wrapper"><a class="btn-close-popup" href="#">
-        <svg class="icon-16 d-inline-flex align-items-center justify-content-center" fill="#111111" stroke="#111111" width="24" height="24" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-        </svg></a>
-      <h5 class="mb-15">Your Wishlist</h5>
-      <div class="box-products-cart">
-        {% if cart %}
-        <div class="list-items-cart">
-          {% for cartitem in cart_items %}
-          {% if cartitem.is_active %}
-          <div class="item-cart">
-            <div class="item-cart-image"><img src="{{ cartitem.product.product_images.url }}" alt="zenia"></div>
-            <div class="item-cart-info">
-              <div class="item-cart-info-1"><a class="text-16-medium" href="{% url 'user_product_detail' id=cartitem.product.id %}">{{ cartitem.product.product_name}}</a>
-                
-                <p class="body-p2 d-block d-sm-none mb-8">₹{{cartitem.product.price}}</p>
-                <div class="box-form-cart">
-                  <div class="btn btn-black">Add to cart</div>
-                </div>
-              </div>
-              <div class="item-cart-info-2">
-                <p class="body-p2 d-none d-sm-block">₹{{cartitem.product.price}}</p>
-              </div>
-            </div>
-          </div>
-          {% endif %}
-          {% endfor %}
-          {% else %}
-          <div class="box-empty-cart d-none">
-            <div class="icon-empty-cart"><img src="{% static 'assets/imgs/template/icons/empty-cart.svg' %}" alt="zenia"></div>
-            <div class="info-empty-cart">
-              <p class="text-17 neutral-medium-dark">Your cart is empty</p><a class="link-underline" href="#">Add from Wishlist</a>
-            </div>
-          </div>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-  </div>
+  
   
   <div class="box-popup-cart">
     <div class="box-cart-overlay"></div>

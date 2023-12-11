@@ -10,12 +10,16 @@ def custom_context(request):
     cart = 0
     cart_items = 0
     quantity = 0
+    wishlist = 0
+
     try:
+        wishlist = Wishlist.objects.all().filter(user=request.user.id)
         cart = Cart.objects.get(user=request.user.id)
         if cart:
             try:
                 cart_items = CartItem.objects.filter(cart=cart,is_active=True)
                 quantity = sum(cart_item.quantity for cart_item in cart_items)
+                
             except CartItem.DoesNotExist:
                 pass
         
@@ -29,4 +33,5 @@ def custom_context(request):
         'sform':sform,
         'cart_items':cart_items,
         'quantity':quantity,
+        'wishlist':wishlist,
     }

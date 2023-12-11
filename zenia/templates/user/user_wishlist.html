@@ -66,7 +66,7 @@ Zenia
    <section class="section block-cart">
      <div class="container">
        <div class="row mt-20">
-         <div class="col-lg-7">
+         <div class="col-lg-12">
            <div class="box-title-cart">
              <h4>Your Wishlist</h4>
              <h6></h6>
@@ -78,7 +78,7 @@ Zenia
                 
                 
             <div class="" >
-              <a href="{% url 'user_remove_wishlist' id=product.id %}" class="" ><i class="fa-solid fa-xmark fa-2xl" style="color: #000000;"></i></a>
+              <a href="{% url 'user_remove_wishlist' id=item.id %}" class="" ><i class="fa-solid fa-xmark fa-2xl" style="color: #000000;"></i></a>
             </div>
             <div class="item-cart mb-3">
               <div class="item-cart-image"><img src="{{ item.product.product_images.url }}" alt="Guza"></div>
@@ -87,7 +87,7 @@ Zenia
                   <p class="body-p my-2">&#8377;{{item.product.price}}</p>
                 </div>
                 <div class="item-cart-info-2">
-                  <p class="body-p2" id="productTotal{{ item.product.id }}">&#8377;{{item.subtotal}}</p>
+                  <a href="{% url 'user_remove_wishlist' id=item.id %}" class="btn btn-black px-5" >Add to cart</a>
                 </div>
               </div>
             </div>
@@ -95,26 +95,7 @@ Zenia
 
             {% endfor %}
           </div>
-          <form action="/user_coupon" method="post">
-            {% csrf_token %}
-          <div class="box-coupon">
-            
-            {% if applied %}
-
-            <div class="coupon-left">
-              <input class="form-control input-coupon text-success" id="coupon_code" name="coupon" type="text" value="{{coupon.code}} Applied" disabled>
-              </div>
-            </div>
-            {% else %}
-            <div class="coupon-left">
-              <input class="form-control input-coupon" id="coupon_code" name="coupon" type="text" placeholder="Coupon code" required>
-              <button class="btn btn-border" type="submit" >Apply</button>
-            </div>
-            {% comment %} <div class="coupon-right"><a class="btn btn-border" href="#">Update Cart</a></div> {% endcomment %}
-          </div>
-          {% endif %}
-            
-          </form>
+          
         </div>
   
       </div>

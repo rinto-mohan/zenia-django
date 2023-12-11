@@ -372,6 +372,27 @@ def user_shop(request,category_id=None):
         }
     return render(request,'user/user-shop.html',context)
 
+def user_sort(request,id):
+    print('idddddddddd',id)
+    if id==1:
+        products = Product.objects.all().filter(is_available=True).order_by('-offer_price') 
+        paginator = Paginator(products,8)
+        page = request.GET.get('page')
+        paged_products = paginator.get_page(page)
+        product_count = products.count()
+    elif id==0:
+        products = Product.objects.all().filter(is_available=True).order_by('offer_price')
+        paginator = Paginator(products,8)
+        page = request.GET.get('page')
+        paged_products = paginator.get_page(page)
+        product_count = products.count()
+
+    context = {
+        'products': paged_products,
+        'product_count': product_count,
+        }
+    return render(request,'user/user-shop.html',context)
+
 #-----------------------------------------USER PRODUCT DETAILS-------------------------------------------
 
 
@@ -1196,7 +1217,7 @@ def search(request):
 
     return render(request, 'user/user-shop.html', context)
 
-
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_add_wishlist(request,id):
     product = get_object_or_404(Product, id=id)
     wishlist = Wishlist(
@@ -1205,4 +1226,27 @@ def user_add_wishlist(request,id):
     )
     wishlist.save()
     wishlist = Wishlist.objects.all().filter(user=request.user)
+    messages.success(request,'Item added to wishlist')
+    return redirect(request.META.get('HTTP_REFERER', 'user_wishlist'))
+
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
+def user_remove_wishlist(request,id):
+    try:
+        wishlist = get_object_or_404(Wishlist, id=id)
+        wishlist.delete()
+    except:
+        pass
+    try:
+        wishlist = Wishlist.objects.all().filter(user=request.user)
+    except:
+        wishlist = 0
     return render(request, 'user/user_wishlist.html',{'wishlist':wishlist} )
+
+@cache_control(no_cache=True,must_revalidate=True,no_store=True)
+def user_wishlist(request):
+    try:
+        wishlist = Wishlist.objects.all().filter(user=request.user)
+    except :
+        wishlist = 0
+    return render(request, 'user/user_wishlist.html',{'wishlist':wishlist} )
+

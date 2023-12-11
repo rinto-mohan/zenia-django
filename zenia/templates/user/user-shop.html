@@ -35,13 +35,35 @@ zenia
       <div class="container">
         <div class="shop-top-filter row">
             <form action="{% url 'search' %}" class="form-inline">
-                <div class="form-group d-flex col-12 col-md-5 p-2">
+                <div class="form-group d-flex col-9 col-md-8 p-2">
                     <input class="form-control search-icon" type="text" placeholder="Search..." name="keyword" required>
                     <button type="submit" class="btn btn-black">Search</button>
-                </div>
             </form>
+
+                    <div class="col-md-4 col-3">
+                    <div class="box-sort"> 
+                      <div class="box-sortby d-flex align-items-center">
+                        <div class="dropdown dropdown-sort">
+                          <button class="btn dropdown-toggle" id="dropdownSort" type="button" data-bs-toggle="dropdown" aria-expanded="false">Default Sorting</button>
+                          <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="dropdownSort" style="margin: 0px;">
+                            <a class="dropdown-item " href="{% url 'user_sort' id='0' %}"><li>Price low to High</li></a>
+                            <a class="dropdown-item " href="{% url 'user_sort' id='1' %}"><li>Price High to low</li></a>
+                            <li><a class="dropdown-item" href="#"></a></li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="box-view-style"> 
+                        <a class="view-type view-2" href="#" data-col="2"></a>
+                        <a class="view-type view-3 active" href="#" data-col="3"></a>
+                        <a class="view-type view-4" href="#" data-col="4"></a>
+                        <a class="view-type view-5" href="#" data-col="5"></a>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
     
-            <div class="right-filter">
+            {% comment %} <div class="right-filter">
                 <div class="box-filter-top">
                     <div class="number-product">
                     </div>
@@ -56,61 +78,11 @@ zenia
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> {% endcomment %}
         </div>
     </div>
     
- 
-      <div class="block-filter-middle">
-        <div class="container">
-          <div class="box-filters"> 
-            <div class="block-filter block-filter-big"> 
-              <h6 class="head-filter">Categories</h6>
-              <div class="box-collapse scrollFilter">
-                <ul class="list-filter-checkbox"> 
-                  {% for category in categories %}
-                  <li> 
-                    <label class="cb-container">
-                      <input type="checkbox"><span class="text-small">{{category.category_name}} <span class="neutral-medium"></span></span><span class="checkmark"></span>
-                    </label><span class="arrow-down"></span>
-                  </li>
-                  {% endfor %}
-                </ul>
-              </div>
-            </div>
-           
-            <div class="block-filter"> 
-              <h6 class="head-filter">Size </h6>
-              <div class="box-collapse scrollFilter">
-                <ul class="list-filter-checkbox"> 
 
-                  <li> 
-                    <label class="cb-container">
-                      <input type="checkbox"><span class="text-small">S <span class="neutral-medium">(3)</span></span><span class="checkmark"></span>
-                    </label>
-                  </li>
-                  
-                </ul>
-              </div>
-            </div>
-            <div class="block-filter"> 
-              <h6 class="head-filter">Brand </h6>
-              <div class="box-collapse scrollFilter">
-                <ul class="list-filter-checkbox"> 
-                  
-                  <li> 
-                    <label class="cb-container">
-                      <input type="checkbox"><span class="text-small">Adidas</span><span class="checkmark"></span>
-                    </label>
-                  </li>
-                  
-                </ul>
-              </div>
-            </div>
-            
-          </div>
-        </div>
-      </div>
       <div class="container">
         
         <div class="box-list-products box-list-products-4 box-list-products-shop-2">
@@ -175,6 +147,10 @@ zenia
       </div>
     </section>
   </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
+
       
               {% comment %} </div>
               <div class="col-lg-3 primary-sidebar sticky-sidebar">
