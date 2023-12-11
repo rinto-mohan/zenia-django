@@ -151,8 +151,17 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR/'media'
 
-KEY = 'rzp_test_pgmjQmtCzLQYQb'
-SECRET = 'BDOreptJ5p0vFKWqzsnkFQ2V'
+KEY = config('KEY')
+SECRET = config('SECRET')
+
+MEDIA_URL ='media/'
+MEDIA_ROOT = BASE_DIR /'media'
+
+# KEY = 'rzp_test_pgmjQmtCzLQYQb'
+# SECRET = 'BDOreptJ5p0vFKWqzsnkFQ2V'
+
+
+STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
