@@ -86,11 +86,16 @@ Zenia
                 <div class="item-cart-info-1"><a class="text-16-medium" href="{% url 'user_product_detail' id=item.product.id %}">{{ item.product.product_name}}</a>
                   <p class="body-p my-2">&#8377;{{item.product.price}}</p>
                 </div>
-                <div class="item-cart-info-2">
-                  <a href="{% url 'user_remove_wishlist' id=item.id %}" class="btn btn-black px-5" >Add to cart</a>
-                </div>
+                <form action="{% url 'user_add_to_cart' id=item.product.id %}" method="post">
+                  {% csrf_token %}
+                  <div class="item-ca-info-2">
+                  </div>
+                  <input class="qty-val form-control" type="text" name="quantity" value="1" min="1" hidden>
+                  <button class="btn btn-black px-5" type="submit" >Add to Cart</button>
+                </form>
               </div>
             </div>
+
             {% endif %}
 
             {% endfor %}

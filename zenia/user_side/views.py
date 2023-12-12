@@ -393,6 +393,7 @@ def user_sort(request,id):
         }
     return render(request,'user/user-shop.html',context)
 
+
 #-----------------------------------------USER PRODUCT DETAILS-------------------------------------------
 
 
@@ -478,6 +479,7 @@ def user_cart(request,total=0,quantity=0,cart_items=None):
 
     return render(request,'user/user_cart.html',context)
 
+
 def user_add_to_cart(request, id):
     if request.user.is_authenticated:
         if request.method == 'POST':
@@ -492,7 +494,7 @@ def user_add_to_cart(request, id):
                 cart = Cart.objects.get(user=request.user)
             except:
                 cart = Cart.objects.create(user=request.user)
-
+ 
             try:
                 cart_item = CartItem.objects.get(product=product,cart=cart)
                 if int(quantity) <= product.quantity :
@@ -610,7 +612,7 @@ def user_default_address(request,id):
     return redirect(request.META.get('HTTP_REFERER', 'user_checkout'))
     
 
-#---------------------------------------USER PROFILE--------------------------------------------------
+#-------------------------------------------------------USER PROFILE----------------------------------------------------------------------
 
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
@@ -699,7 +701,8 @@ def user_change_password_profile(request):
     return render(request, 'user/user_change_password_profile.html',context)
 
 
-#---------------------------------------USER ADDRESS-----------------------------------------------------
+#-----------------------------------------------------USER ADDRESS----------------------------------------------------------------------
+
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def user_add_address(request):
@@ -846,6 +849,7 @@ def user_edit_address(request,address_id):
 
         return redirect(request.META.get('HTTP_REFERER', 'user_profile'))
     
+    
 def user_delete_address(request,address_id):
     address = Address.objects.get(id=address_id)
     
@@ -867,7 +871,8 @@ def user_delete_address(request,address_id):
     return redirect(request.META.get('HTTP_REFERER', 'user_profile'))
 
 
-# ------------------------------------------ORDERS-------------------------------------------------------
+# -------------------------------------------------------ORDERS-------------------------------------------------------
+
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def user_place_order(request):
@@ -991,6 +996,19 @@ def user_place_order(request):
             'order':order,
             'order_items':order_items,
                 }
+            payment = Payment(
+                user=request.user,
+                payment_id=order.order_number,
+                payment_method="Razorpay",
+                status="Paid",
+                amount_paid=order.order_total,
+            )
+            payment.save()
+            order.payment = payment
+            order.payment_method = 'Razorpay'
+            order.status = 'Placed'
+            order.is_paid=True
+            order.save()
             cart_items.delete()
             return render(request, 'user/user_payment.html',context)
         
@@ -1000,6 +1018,7 @@ def user_place_order(request):
 def user_payment(request, id):
     order = get_object_or_404(Order, id=id)
 
+
     total_amount = order.order_total
     transaction_id = request.GET.get('transactionId')
     razorpay_client = razorpay.Client(auth=(settings.KEY, settings.SECRET))
@@ -1008,13 +1027,18 @@ def user_payment(request, id):
     transaction_id = payment['id']
 
     payment = Payment(
-        user=request.user,
+        user=request.user.id,
         payment_id=transaction_id,
-        payment_method="Razorpay",
+        payment_method='Razorpay',
         status="Paid",
         amount_paid=total_amount,
     )
     payment.save()
+
+    print('status',payment.status)
+    print('transaction_id',transaction_id)
+    print('payment',payment)
+    print('payment_method',payment.payment_method)
 
     order = get_object_or_404(Order, id=id)
     order.payment = payment
@@ -1105,7 +1129,9 @@ def user_order_details(request,id):
             }
     return render(request, 'user/user_order_details.html',context)
 
-#--------------------------------------------USER CHECKOUT-------------------------------------------------
+
+#-------------------------------------------------------USER CHECKOUT-------------------------------------------------
+
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 @login_required(login_url='user_login')
