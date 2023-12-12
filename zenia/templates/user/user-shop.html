@@ -44,11 +44,27 @@ zenia
                     <div class="box-sort"> 
                       <div class="box-sortby d-flex align-items-center">
                         <div class="dropdown dropdown-sort">
-                          <button class="btn dropdown-toggle" id="dropdownSort" type="button" data-bs-toggle="dropdown" aria-expanded="false">Default Sorting</button>
+                          <button class="btn dropdown-toggle" id="dropdownSort" type="button" data-bs-toggle="dropdown" aria-expanded="false">Sort</button>
                           <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="dropdownSort" style="margin: 0px;">
                             <a class="dropdown-item " href="{% url 'user_sort' id='0' %}"><li>Price low to High</li></a>
                             <a class="dropdown-item " href="{% url 'user_sort' id='1' %}"><li>Price High to low</li></a>
                             <li><a class="dropdown-item" href="#"></a></li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="box-sortby d-flex align-items-center">
+                        <div class="dropdown dropdown-sort">
+                          <button class="btn dropdown-toggle" id="dropdownSort" type="button" data-bs-toggle="dropdown" aria-expanded="false">Select by category</button>
+                          <ul class="dropdown-menu dropdown-menu-light" aria-labelledby="dropdownSort" style="margin: 0px;">
+                            
+                            {% if categories %}
+                              
+                           
+                              
+                            {% for cat in categories %}
+                            <a class="dropdown-item " href="{% url 'user_filter' id=cat.id %}"><li>{{cat.category_name}}</li></a>
+                            {% endfor %}
+                            {% endif %}
                           </ul>
                         </div>
                       </div>
@@ -100,7 +116,8 @@ zenia
               </div>
               <div class="cardInfo"><a href="#">
                   <h6 class="text-16-medium cardTitle">{{product.product_name}}</h6></a>
-                <p class="body-p2 ">₹{{product.price}}</p>
+                <p class="body-p2 ">₹{{product.offer_price}} </p>
+                
                 
               </div>
             </div>

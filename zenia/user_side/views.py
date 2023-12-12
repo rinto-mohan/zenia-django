@@ -1243,6 +1243,21 @@ def search(request):
 
     return render(request, 'user/user-shop.html', context)
 
+
+def user_filter(request,id):
+    category = get_object_or_404(Category,id=id)
+    products = None
+    if category:
+        products =  Product.objects.order_by('id').filter(category=category)
+    else:
+        return redirect('user_shop')
+    
+    context = {
+        'products': products,
+    }
+  
+    return render(request, 'user/user-shop.html', context)
+
 @cache_control(no_cache=True,must_revalidate=True,no_store=True)
 def user_add_wishlist(request,id):
     product = get_object_or_404(Product, id=id)
@@ -1275,4 +1290,3 @@ def user_wishlist(request):
     except :
         wishlist = 0
     return render(request, 'user/user_wishlist.html',{'wishlist':wishlist} )
-

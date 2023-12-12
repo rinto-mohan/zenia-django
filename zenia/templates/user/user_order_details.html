@@ -205,7 +205,7 @@ Zenia
                   <h5 class="my-2 text-success">Total: ₹{{order.order_total}} </h5 class="m-2 text-success">
                   
                   {% if order.status == 'Placed' or order.status == 'Shipped' or order.status == 'Payment Pending' %}  
-                  <a href="{% url 'user_cancel_orderrr' id=order.id %}"><button class="btn btn-black m-3" id="cancel_order" data-id="{{order.id}}">Cancel Order</button></a>
+                  <a href="{% url 'user_cancel_orderr' id=order.id %}"><button class="btn btn-black m-3" id="cancel_order" data-id="{{order.id}}">Cancel Order</button></a>
                   {% elif order.status == 'Cancelled' %}
                   <a href="#"><button class="btn btn-black m-3" disabled>Cancelled</button></a>
                   {% elif order.status == 'Return Pending' %}

@@ -806,7 +806,9 @@ def admin_update_order_status(request, order_id, new_status):
             product = order_product.product
             product.quantity += order_product.quantity
             product.save()
-        if order.payment.payment_method == 'Razorpay':
+        d = order.payment
+        print("orderpaymentt!!!!",d)
+        if order.is_paid:
             try:
                 user_wallet = Wallet.objects.get(user=order.user)
                 user_wallet.balance += Decimal(order.order_total)
