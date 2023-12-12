@@ -1245,12 +1245,18 @@ def search(request):
 
 
 def user_filter(request,id):
-    category = get_object_or_404(Category,id=id)
     products = None
-    if category:
-        products =  Product.objects.order_by('id').filter(category=category)
+
+    if id == 0:
+        products = Product.objects.all().filter(is_available=True)
     else:
-        return redirect('user_shop')
+        category = get_object_or_404(Category,id=id)
+    
+        if category:        
+            products =  Product.objects.order_by('id').filter(category=category)
+
+        else:
+            return redirect('user_shop')
     
     context = {
         'products': products,

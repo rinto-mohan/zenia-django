@@ -64,6 +64,7 @@ zenia
                             {% for cat in categories %}
                             <a class="dropdown-item " href="{% url 'user_filter' id=cat.id %}"><li>{{cat.category_name}}</li></a>
                             {% endfor %}
+                            <a class="dropdown-item " href="{% url 'user_filter' id=0 %}"><li>View all</li></a>
                             {% endif %}
                           </ul>
                         </div>
